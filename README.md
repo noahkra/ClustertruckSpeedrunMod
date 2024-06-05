@@ -1,4 +1,4 @@
-# SRC Mod Queue
+# Clustertruck Speedrun Mod
 ![release_shield](https://img.shields.io/github/v/release/noahkra/ClustertruckSpeedrunMod?include_prereleases&color=blue) ![totaldownloads_shield](https://img.shields.io/github/downloads/noahkra/ClustertruckSpeedrunMod/total?label=total%20downloads) ![latestdownloads_shield](https://img.shields.io/github/downloads-pre/noahkra/ClustertruckSpeedrunMod/latest/total) 
 
 ![bug shield](https://img.shields.io/github/issues-raw/noahkra/ClustertruckSpeedrunMod/bug) ![enhancements shield](https://img.shields.io/github/issues-raw/noahkra/ClustertruckSpeedrunMod/enhancement) ![closedissues shield](https://img.shields.io/github/issues-closed-raw/noahkra/ClustertruckSpeedrunMod?color=green)
