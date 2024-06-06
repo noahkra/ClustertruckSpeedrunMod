@@ -16,6 +16,7 @@ If you have any feature requests or want to report a bug, make sure to submit an
 # Features
 - [ ] Customise truck colours
 - [ ] Edit target framerate (Up to 240 FPS as per SRC leaderboard rules)
+- [ ] Ingame FPS counter
 - [ ] Unbind jump for jumpless runs
 - [ ] Fix in-game timer accuracy
 - [ ] Preload 9:10
