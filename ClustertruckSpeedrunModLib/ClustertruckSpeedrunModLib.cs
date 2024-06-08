@@ -45,6 +45,10 @@ namespace ClustertruckSpeedrunModLib
 			{
 				var harmony = new Harmony("com.clustertruckspeedrun.mod");
 
+#if DEBUG
+				Harmony.DEBUG = true;
+#endif
+
 				Console.WriteLine("[SPEEDRUNMOD] Applying MenuTitlePatch...");
 				MenuTitlePatch.Apply(harmony);
 
