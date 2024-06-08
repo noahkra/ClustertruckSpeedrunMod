@@ -21,6 +21,7 @@ If you have any feature requests or want to report a bug, make sure to submit an
 - [x] Disable jump for jumpless runs
 - [x] Invert sprint (Sprint by default, shift to walk)
 - [x] Enable in-game timer by default
+- [ ] Livesplit server hook
 - [ ] Fix in-game timer accuracy
 - [ ] Airtime timer (for flying% category)
 - [ ] Low grav patch (for LowGrav category)
@@ -31,6 +32,6 @@ If you have any feature requests or want to report a bug, make sure to submit an
 # How to use
 Put the folder anywhere and run the exe. Select your Clustertruck folder and the desired patches and press the patch button, then launch the game as normal.
 
-
 # Known issues
 - Unpatching after patching doesn't work. Just restart the program after which it should work fine.
+- This mod is not compatible with mrhappyrobot's autosplitter, as that is hard coded to read memory values which are moved around by modding the game.
