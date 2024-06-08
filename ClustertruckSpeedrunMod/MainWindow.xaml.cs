@@ -158,7 +158,7 @@ namespace ClustertruckSpeedrunMod
 
 				// Wrong folder?
 				if (!File.Exists(gameAssemblyPath)) {
-					throw new Exception("Assembly-CSharp.dll not found.\n\nAre you sure you selected the right folder?");
+					throw new Exception("Clustertruck directory not found.\n\nAre you sure you selected the right folder?");
 				}
 
 				// Necessary dlls?
