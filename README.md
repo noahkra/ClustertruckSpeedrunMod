@@ -3,7 +3,7 @@
 
 ![bug shield](https://img.shields.io/github/issues-raw/noahkra/ClustertruckSpeedrunMod/bug) ![enhancements shield](https://img.shields.io/github/issues-raw/noahkra/ClustertruckSpeedrunMod/enhancement) ![closedissues shield](https://img.shields.io/github/issues-closed-raw/noahkra/ClustertruckSpeedrunMod?color=green)
 
-A patcher/launcher for Clustertruck that adds quality of life improvements for speedrunning and more!
+A patcher for Clustertruck that adds quality of life improvements, mods for speedrunning and more!
 
 If you have any feature requests or want to report a bug, make sure to submit an [issue](https://github.com/noahkra/ClustertruckSpeedrunMod/issues/new/choose) and it might get added in a future release!
 
@@ -14,19 +14,23 @@ If you have any feature requests or want to report a bug, make sure to submit an
 ***
 
 # Features
-- [ ] Customise truck colours
-- [ ] Edit target framerate (Up to 240 FPS as per SRC leaderboard rules)
-- [ ] Ingame FPS counter
-- [ ] Unbind jump for jumpless runs
+- [x] Speedometer
+- [x] Customise truck colours
+- [x] Set target framerate (Up to 240 FPS as per SRC leaderboard rules)
+- [x] In-game FPS counter
+- [x] Disable jump for jumpless runs
+- [x] Invert sprint (Sprint by default, shift to walk)
+- [x] Enable in-game timer by default
 - [ ] Fix in-game timer accuracy
-- [ ] Preload 9:10
-- [ ] Multiplayer
-- [ ] Randomiser (Levels & abilities)
-- [ ] Low grav patch (for LowGrav category)
 - [ ] Airtime timer (for flying% category)
+- [ ] Low grav patch (for LowGrav category)
+- [ ] Randomiser (Levels & abilities)
+- [ ] Multiplayer
+- [ ] Preload 9:10
 
 # How to use
-- Select the desired patches and then press the patch button while the game is running.
+Put the folder anywhere and run the exe. Select your Clustertruck folder and the desired patches and press the patch button, then launch the game as normal.
+
 
 # Known issues
-- None yet
+- Unpatching after patching doesn't work. Just restart the program after which it should work fine.
