@@ -1,0 +1,45 @@
+﻿<Window x:Class="ClustertruckSpeedrunMod.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClustertruckSpeedrunMod"
+        mc:Ignorable="d"
+        Title="Clustertruck Speedrun Mod v1.0.0 PATCHER" Height="450" Width="598" ResizeMode="NoResize" HorizontalAlignment="Center" VerticalAlignment="Center" SizeToContent="WidthAndHeight">
+    <Grid>
+        <Grid Margin="10,10,10,399">
+            <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Clustertruck Folder:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Height="20"/>
+            <TextBox x:Name="FolderPath" TextWrapping="Wrap" Text="Path/To/Clustertruck/Folder" Margin="115,0,75,0" VerticalAlignment="Top" Height="20" IsReadOnly="True"/>
+            <Button x:Name="BrowseFolders" Content="Browse" Margin="503,0,0,0" VerticalAlignment="Top" Height="20" Click="BrowseFolders_Click"/>
+        </Grid>
+        <Grid Margin="10,40,279,40">
+            <CheckBox x:Name="EnableSpeedometer" Content="Enable Speedometer (For practice only!)" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <CheckBox x:Name="EnableTruckColor" Content="Custom Truck Colours:" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <TextBox x:Name="TruckColor" HorizontalAlignment="Left" Margin="32,70,0,0" TextWrapping="Wrap" Text="#FFFFFF" VerticalAlignment="Top" Width="124" IsEnabled="False"/>
+            <CheckBox x:Name="UnlockFPS" Content="Unlock FPS:" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Width="290" Margin="0,93,0,0"/>
+            <Slider x:Name="TargetFPS" HorizontalAlignment="Left" Height="18" Margin="32,113,0,0" VerticalAlignment="Top" Width="238" Maximum="240" SmallChange="1" TickFrequency="10" Minimum="90" LargeChange="10" IsEnabled="False"/>
+            <CheckBox x:Name="EnableFPSCounter" Content="Enable FPS Counter" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <CheckBox x:Name="DisableJump" Content="Disable Jump (For jumpless categories)" HorizontalAlignment="Center" Margin="0,156,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <CheckBox x:Name="InvertSprint" Content="Invert Sprint Button" HorizontalAlignment="Center" Margin="0,176,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" HorizontalAlignment="Center" Margin="0,196,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <TextBlock x:Name="TargetFPSValue" HorizontalAlignment="Left" Margin="275,113,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Height="18" Width="27"/>
+            <RadioButton x:Name="mps" GroupName="SpeedUnit" Content="m/s" HorizontalAlignment="Left" Margin="32,30,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
+            <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" HorizontalAlignment="Left" Margin="76,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" HorizontalAlignment="Left" Margin="128,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+        </Grid>
+        <Button x:Name="PatchButton" Content="Apply Patches" VerticalAlignment="Top" Click="PatchButton_Click" Height="270" Margin="324,40,10,0"/>
+        <Button x:Name="UnpatchButton" Content="Remove All Patches" VerticalAlignment="Top" Height="79" Margin="324,315,10,0" Click="UnpatchButton_Click"/>
+        <ProgressBar x:Name="ProgressVal" HorizontalAlignment="Right" Height="25" Margin="0,399,10,0" VerticalAlignment="Top" Width="257" Value="0"/>
+        <TextBlock x:Name="ProgressText" TextWrapping="Wrap" Text="" Margin="324,399,10,10" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <UIElement.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </UIElement.RenderTransform>
+        </TextBlock>
+        <Label x:Name="label" Content="Made with ❤️ by Noah :)" HorizontalAlignment="Left" Margin="0,408,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
