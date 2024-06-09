@@ -20,30 +20,31 @@ namespace ClustertruckSpeedrunModLib
 
 		public static void Connect()
 		{
-			client = new NamedPipeClientStream(".", "LiveSplit");
-			client.Connect();
-
-			if (client.IsConnected)
+			try
 			{
-				pipeReader = new StreamReader(client);
-				pipeWriter = new StreamWriter(client);
+				client = new NamedPipeClientStream(".", "LiveSplit");
+				client.Connect();
+
+				if (client.IsConnected)
+				{
+					pipeReader = new StreamReader(client);
+					pipeWriter = new StreamWriter(client);
+				}
 			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"[SPEEDRUNMOD] {ex.Message}");
+			}
+
 		}
 
-		static string SendMessage(string message)
+		static void SendMessage(string message)
 		{
 			if (client.IsConnected)
 			{
 				pipeWriter.WriteLine(message);
 				pipeWriter.Flush();
-				return pipeReader.ReadLine();
-			} 
-			else
-			{
-				Connect();
-				return "0";
 			}
-		
 		}
 
 		public static void Start()
@@ -73,7 +74,11 @@ namespace ClustertruckSpeedrunModLib
 
 		public static int GetSplitIndex()
 		{
-			return int.Parse(SendMessage("getsplitindex"));
+			SendMessage("getsplitindex");
+			if (client.IsConnected) {
+				return int.Parse(pipeReader.ReadLine());
+			}
+			return -1;
 		}
 	}
 
@@ -221,21 +226,14 @@ namespace ClustertruckSpeedrunModLib
 		}
 
 		public static void MenuResetPostfix() {
-			try
+			if (!Autosplitter.client.IsConnected)
 			{
-				if (!Autosplitter.client.IsConnected)
-				{
-					Autosplitter.Connect();
-				}
-				if (Patcher.SplitResetInMenu)
-				{
-					Autosplitter.Reset();
-				}
-			} catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
+				Autosplitter.Connect();
 			}
-			
+			if (Patcher.SplitResetInMenu)
+			{
+				Autosplitter.Reset();
+			}
 		}
 	}	
 
