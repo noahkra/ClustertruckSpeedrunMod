@@ -106,7 +106,7 @@ namespace ClustertruckSpeedrunMod
 			SetSpeedUnitInt();
 			EnableLivesplit.IsChecked = Properties.Settings.Default.EnableLivesplit;
 			SplitByLevel.IsChecked = Properties.Settings.Default.SplitByLevel;
-			SplitResetInMenu.IsEnabled = Properties.Settings.Default.SplitResetInMenu;
+			SplitResetInMenu.IsChecked = Properties.Settings.Default.SplitResetInMenu;
 		}
 		private void EnableTruckColor_Checked(object sender, RoutedEventArgs e)
 		{

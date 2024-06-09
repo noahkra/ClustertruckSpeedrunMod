@@ -35,7 +35,7 @@
         </Grid>
         <Button x:Name="PatchButton" Content="Apply Patches" VerticalAlignment="Top" Click="PatchButton_Click" Height="270" Margin="324,40,10,0"/>
         <Button x:Name="UnpatchButton" Content="Remove All Patches" VerticalAlignment="Top" Height="79" Margin="324,315,10,0" Click="UnpatchButton_Click"/>
-        <ProgressBar x:Name="ProgressVal" HorizontalAlignment="Right" Height="25" Margin="0,399,10,0" VerticalAlignment="Top" Width="257" Value="0"/>
+        <ProgressBar x:Name="ProgressVal" HorizontalAlignment="Left" Height="25" Margin="324,399,0,0" VerticalAlignment="Top" Width="276" Value="0"/>
         <TextBlock x:Name="ProgressText" TextWrapping="Wrap" Text="" Margin="324,399,10,10" HorizontalAlignment="Center" VerticalAlignment="Center">
             <UIElement.RenderTransform>
                 <TransformGroup>

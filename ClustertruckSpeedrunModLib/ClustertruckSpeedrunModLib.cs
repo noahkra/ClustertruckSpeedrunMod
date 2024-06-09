@@ -16,6 +16,7 @@ namespace ClustertruckSpeedrunModLib
 		public static NamedPipeClientStream client;
 		public static StreamReader pipeReader;
 		public static StreamWriter pipeWriter;
+		public static bool FirstSplit;
 
 		public static void Connect()
 		{
@@ -29,13 +30,23 @@ namespace ClustertruckSpeedrunModLib
 			}
 		}
 
-		static void SendMessage(string message)
+		static string SendMessage(string message)
 		{
-			pipeWriter.WriteLine(message);
-			pipeWriter.Flush();
+			if (client.IsConnected)
+			{
+				pipeWriter.WriteLine(message);
+				pipeWriter.Flush();
+				return pipeReader.ReadLine();
+			} 
+			else
+			{
+				Connect();
+				return "0";
+			}
+		
 		}
 
-		public static void StartTimer()
+		public static void Start()
 		{
 			SendMessage("starttimer");
 		}
@@ -58,6 +69,11 @@ namespace ClustertruckSpeedrunModLib
 		public static void Split()
 		{
 			SendMessage("split");
+		}
+
+		public static int GetSplitIndex()
+		{
+			return int.Parse(SendMessage("getsplitindex"));
 		}
 	}
 
@@ -82,10 +98,10 @@ namespace ClustertruckSpeedrunModLib
 		public static bool SplitResetInMenu;
 
 		public static void DoPatching(
-			bool _enableSpeedometer, int _speedUnit, 
-			float _truckColorR, float _truckColorG, float _truckColorB, 
-			int _targetFramerate, bool _enableFPSCounter, bool _disableJump, 
-			bool _invertSprint, bool _enableTimer, bool _enableLivesplit, 
+			bool _enableSpeedometer, int _speedUnit,
+			float _truckColorR, float _truckColorG, float _truckColorB,
+			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
+			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu)
 		{
 			FPSinterval = 0;
@@ -127,10 +143,10 @@ namespace ClustertruckSpeedrunModLib
 
 				Console.WriteLine("[SPEEDRUNMOD] Applying TruckColorPatch...");
 				TruckColorPatch.Apply(harmony);
-		
+
 				Console.WriteLine("[SPEEDRUNMOD] Applying FPSPatch...");
 				FPSPatch.Apply(harmony);
-			
+
 				if (DisableJump)
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying JumplessPatch...");
@@ -148,23 +164,80 @@ namespace ClustertruckSpeedrunModLib
 				}
 
 				Console.WriteLine("[SPEEDRUNMOD] All patches applied successfully!");
-			} 
-			catch (Exception ex)
+			} catch (Exception ex)
 			{
 				Console.WriteLine($"[SPEEDRUNMOD] Patching Failed: {ex}");
 			}
 		}
 	}
-	
+
 	static class LivesplitPatch
 	{
 		public static void Apply(Harmony harmony)
 		{
+			var pauseSplitOriginal = typeof(steam_WorkshopHandler).GetMethod(nameof(steam_WorkshopHandler.UploadScoreToLeaderBoard));
+			var unpauseStartOriginal = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+			var menuResetOriginal = typeof(Manager).GetMethod(nameof(Manager.ActuallyGoToLevelSelect));
 
+			var pauseSplitPatch = typeof(LivesplitPatch).GetMethod(nameof(PauseSplitPostfix));
+			var unpauseStartPatch = typeof(LivesplitPatch).GetMethod(nameof(unpauseStartPrefix));
+			var menuResetPatch = typeof(LivesplitPatch).GetMethod(nameof(MenuResetPostfix));
+
+			harmony.Patch(pauseSplitOriginal, postfix: new HarmonyMethod(pauseSplitPatch));
+			harmony.Patch(unpauseStartOriginal, prefix: new HarmonyMethod(unpauseStartPatch));
+			harmony.Patch(menuResetOriginal, postfix: new HarmonyMethod(menuResetPatch));
 		}
 
+		public static void PauseSplitPostfix()
+		{
+			Autosplitter.PauseGameTime();
 
-	}
+			// Only split if splitting by level or if first level of the world
+			if (Patcher.SplitByLevel || info.currentLevel % 10 == 0)
+			{
+				Autosplitter.Split();
+			}
+		}
+
+		public static void unpauseStartPrefix(player __instance)
+		{
+			if (__instance.framesSinceStart == 0)
+			{
+				if (info.currentLevel % 10 == 1)
+				{
+					if (Autosplitter.GetSplitIndex() == -1) // If splitter not running
+					{
+						Autosplitter.Start();
+					}
+					if (Autosplitter.GetSplitIndex() == 0) // If first split
+					{
+						Autosplitter.Reset();
+						Autosplitter.Start();
+					}
+				}
+
+				Autosplitter.UnpauseGameTime();
+			}
+		}
+
+		public static void MenuResetPostfix() {
+			try
+			{
+				if (!Autosplitter.client.IsConnected)
+				{
+					Autosplitter.Connect();
+				}
+				if (Patcher.SplitResetInMenu)
+				{
+					Autosplitter.Reset();
+				}
+			} catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+			
+		}
+	}	
 
 	static class MenuTitlePatch
 	{
