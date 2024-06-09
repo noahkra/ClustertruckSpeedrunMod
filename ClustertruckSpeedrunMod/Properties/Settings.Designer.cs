@@ -154,5 +154,41 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["SpeedUnit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableLivesplit {
+            get {
+                return ((bool)(this["EnableLivesplit"]));
+            }
+            set {
+                this["EnableLivesplit"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SplitByLevel {
+            get {
+                return ((bool)(this["SplitByLevel"]));
+            }
+            set {
+                this["SplitByLevel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SplitResetInMenu {
+            get {
+                return ((bool)(this["SplitResetInMenu"]));
+            }
+            set {
+                this["SplitResetInMenu"] = value;
+            }
+        }
     }
 }

@@ -26,6 +26,12 @@
             <RadioButton x:Name="mps" GroupName="SpeedUnit" Content="m/s" HorizontalAlignment="Left" Margin="32,30,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
             <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" HorizontalAlignment="Left" Margin="76,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
             <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" HorizontalAlignment="Left" Margin="128,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+            <Grid Margin="0,221,0,0">
+                <CheckBox x:Name="EnableLivesplit" Content="Enable LiveSplit Autosplitter (1.8.29+)" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+                <RadioButton x:Name="SplitByWorld" GroupName="SplitBy" Content="Split By World" HorizontalAlignment="Left" Margin="32,30,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
+                <RadioButton x:Name="SplitByLevel" GroupName="SplitBy" Content="Split By Level" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+                <CheckBox x:Name="SplitResetInMenu" Content="Reset In Menu" HorizontalAlignment="Left" Margin="31,50,0,0" VerticalAlignment="Top" Height="20" Width="290" IsEnabled="False"/>
+            </Grid>
         </Grid>
         <Button x:Name="PatchButton" Content="Apply Patches" VerticalAlignment="Top" Click="PatchButton_Click" Height="270" Margin="324,40,10,0"/>
         <Button x:Name="UnpatchButton" Content="Remove All Patches" VerticalAlignment="Top" Height="79" Margin="324,315,10,0" Click="UnpatchButton_Click"/>

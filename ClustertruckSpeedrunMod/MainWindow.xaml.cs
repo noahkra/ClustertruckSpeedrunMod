@@ -36,9 +36,26 @@ namespace ClustertruckSpeedrunMod
 
 			TargetFPS.ValueChanged += TargetFPS_ValueChanged;
 
+			EnableLivesplit.Checked += EnableLivesplit_Checked;
+			EnableLivesplit.Unchecked += EnableLivesplit_Unchecked;
+
 			LoadSettings();
 
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
+		}
+
+		private void EnableLivesplit_Unchecked(object sender, RoutedEventArgs e)
+		{
+			SplitByLevel.IsEnabled = false;
+			SplitByWorld.IsEnabled = false;
+			SplitResetInMenu.IsEnabled = false;
+		}
+
+		private void EnableLivesplit_Checked(object sender, RoutedEventArgs e)
+		{
+			SplitByLevel.IsEnabled = true;
+			SplitByWorld.IsEnabled = true;
+			SplitResetInMenu.IsEnabled = true;
 		}
 
 		int GetSpeedUnitInt()
@@ -78,6 +95,9 @@ namespace ClustertruckSpeedrunMod
 			Properties.Settings.Default.InvertSprint = (bool)InvertSprint.IsChecked;
 			Properties.Settings.Default.EnableTimer = (bool)EnableTimer.IsChecked;
 			Properties.Settings.Default.SpeedUnit = GetSpeedUnitInt();
+			Properties.Settings.Default.EnableLivesplit = (bool)EnableLivesplit.IsChecked;
+			Properties.Settings.Default.SplitByLevel = (bool)SplitByLevel.IsChecked;
+			Properties.Settings.Default.SplitResetInMenu = (bool)SplitResetInMenu.IsChecked;
 			Properties.Settings.Default.Save();
 		}
 
@@ -94,6 +114,9 @@ namespace ClustertruckSpeedrunMod
 			InvertSprint.IsChecked = Properties.Settings.Default.InvertSprint;
 			EnableTimer.IsChecked = Properties.Settings.Default.EnableTimer;
 			SetSpeedUnitInt();
+			EnableLivesplit.IsChecked = Properties.Settings.Default.EnableLivesplit;
+			SplitByLevel.IsChecked = Properties.Settings.Default.SplitByLevel;
+			SplitResetInMenu.IsEnabled = Properties.Settings.Default.SplitResetInMenu;
 		}
 		private void EnableTruckColor_Checked(object sender, RoutedEventArgs e)
 		{
@@ -219,6 +242,9 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)DisableJump.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // DisableJump
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)InvertSprint.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // InvertSprint
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableTimer.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableTimer
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableLivesplit.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableLivesplit
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)SplitByLevel.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // SplitByLevel
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)SplitResetInMenu.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // SplitResetInMenu
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Call, mainModule.ImportReference(patchMethod)));
 

@@ -8,9 +8,33 @@ using System.Runtime.InteropServices;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Net.Sockets;
+using System.Text;
 
 namespace ClustertruckSpeedrunModLib
 {
+	public static class Autosplitter
+	{
+		static TcpClient client;
+		static NetworkStream stream;
+
+		public static void Connect()
+		{
+			client = new TcpClient("localhost", 16834);
+			stream = client.GetStream();
+
+			//// Should probably put this somewhere..?
+			// if (stream != null) { stream.Close(); }
+			// if (client != null) { client.Close(); }
+		}
+
+		static void SendMessage(string message)
+		{
+			byte[] data = Encoding.ASCII.GetBytes(message);
+			stream.Write(data, 0, data.Length);
+		}
+	}
+
 	public static class Patcher
 	{
 		public static Rigidbody playRig;
@@ -27,8 +51,16 @@ namespace ClustertruckSpeedrunModLib
 		public static bool DisableJump;
 		public static bool InvertSprint;
 		public static bool EnableTimer;
+		public static bool EnableLivesplit;
+		public static bool SplitByLevel;
+		public static bool SplitResetInMenu;
 
-		public static void DoPatching(bool _enableSpeedometer, int _speedUnit, float _truckColorR, float _truckColorG, float _truckColorB, int _targetFramerate, bool _enableFPSCounter, bool _disableJump, bool _invertSprint, bool _enableTimer)
+		public static void DoPatching(
+			bool _enableSpeedometer, int _speedUnit, 
+			float _truckColorR, float _truckColorG, float _truckColorB, 
+			int _targetFramerate, bool _enableFPSCounter, bool _disableJump, 
+			bool _invertSprint, bool _enableTimer, bool _enableLivesplit, 
+			bool _splitByLevel, bool _splitResetInMenu)
 		{
 			FPSinterval = 0;
 
@@ -40,6 +72,9 @@ namespace ClustertruckSpeedrunModLib
 			DisableJump = _disableJump;
 			InvertSprint = _invertSprint;
 			EnableTimer = _enableTimer;
+			EnableLivesplit = _enableLivesplit;
+			SplitByLevel = _splitByLevel;
+			SplitResetInMenu = _splitResetInMenu;
 
 			try
 			{

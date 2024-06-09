@@ -21,7 +21,9 @@ If you have any feature requests or want to report a bug, make sure to submit an
 - [x] Disable jump for jumpless runs
 - [x] Invert sprint (Sprint by default, shift to walk)
 - [x] Enable in-game timer by default
-- [ ] Livesplit server hook
+- [ ] Livesplit autosplitter
+	- [ ] Split by world or by level
+	- [ ] Reset in menu
 - [ ] Fix in-game timer accuracy
 - [ ] Airtime timer (for flying% category)
 - [ ] Low grav patch (for LowGrav category)
