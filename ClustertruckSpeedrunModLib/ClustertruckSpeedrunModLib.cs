@@ -6,30 +6,58 @@ using System.Reflection.Emit;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Net.Sockets;
-using System.Text;
+using System.IO.Pipes;
+using System.IO;
 
 namespace ClustertruckSpeedrunModLib
 {
 	public static class Autosplitter
 	{
-		static TcpClient client;
-		static NetworkStream stream;
+		public static NamedPipeClientStream client;
+		public static StreamReader pipeReader;
+		public static StreamWriter pipeWriter;
 
 		public static void Connect()
 		{
-			client = new TcpClient("localhost", 16834);
-			stream = client.GetStream();
+			client = new NamedPipeClientStream(".", "LiveSplit");
+			client.Connect();
 
-			//// Should probably put this somewhere..?
-			// if (stream != null) { stream.Close(); }
-			// if (client != null) { client.Close(); }
+			if (client.IsConnected)
+			{
+				pipeReader = new StreamReader(client);
+				pipeWriter = new StreamWriter(client);
+			}
 		}
 
 		static void SendMessage(string message)
 		{
-			byte[] data = Encoding.ASCII.GetBytes(message);
-			stream.Write(data, 0, data.Length);
+			pipeWriter.WriteLine(message);
+			pipeWriter.Flush();
+		}
+
+		public static void StartTimer()
+		{
+			SendMessage("starttimer");
+		}
+
+		public static void PauseGameTime()
+		{
+			SendMessage("pausegametime");
+		}
+
+		public static void UnpauseGameTime()
+		{
+			SendMessage("unpausegametime");
+		}
+
+		public static void Reset()
+		{
+			SendMessage("reset");
+		}
+
+		public static void Split()
+		{
+			SendMessage("split");
 		}
 	}
 
@@ -82,6 +110,14 @@ namespace ClustertruckSpeedrunModLib
 				Harmony.DEBUG = true;
 #endif
 
+				if (EnableLivesplit)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Enabling Autosplitter...");
+					Autosplitter.Connect();
+					Console.WriteLine("[SPEEDRUNMOD] Applying LivesplitPatch...");
+					LivesplitPatch.Apply(harmony);
+				}
+
 				Console.WriteLine("[SPEEDRUNMOD] Applying MenuTitlePatch...");
 				MenuTitlePatch.Apply(harmony);
 
@@ -120,6 +156,16 @@ namespace ClustertruckSpeedrunModLib
 		}
 	}
 	
+	static class LivesplitPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+
+		}
+
+
+	}
+
 	static class MenuTitlePatch
 	{
 		public static void Apply(Harmony harmony)
