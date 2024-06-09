@@ -34,8 +34,8 @@ If you have any feature requests or want to report a bug, make sure to submit an
 # How to use
 Put the folder anywhere and run the exe. Select your Clustertruck folder and the desired patches and press the patch button, then launch the game as normal.
 ## Autosplitter
-To use the auto splitter just enable it in the patches
-Make sure any other autosplitters are disabled. Enable the autosplitter in the patches
+To use the auto splitter just enable it in the patches. To use the auto splitter you must use LiveSplit 1.8.29 or above.
+Make sure any other autosplitters are disabled.
 
 # Known issues
 - Unpatching after patching doesn't work. Just restart the program after which it should work fine.
