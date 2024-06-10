@@ -5,6 +5,8 @@
 
 A patcher for Clustertruck that adds quality of life improvements, mods for speedrunning and more!
 
+***PLEASE NOTE!*** The speedometer is for practice only and is ***NOT*** allowed on the SRC leaderboards!
+
 If you have any feature requests or want to report a bug, make sure to submit an [issue](https://github.com/noahkra/ClustertruckSpeedrunMod/issues/new/choose) and it might get added in a future release!
 
 # Contents
@@ -14,29 +16,41 @@ If you have any feature requests or want to report a bug, make sure to submit an
 ***
 
 # Features
-- [x] Speedometer
-- [x] Customise truck colours
-- [x] Set target framerate (Up to 240 FPS as per SRC leaderboard rules)
-- [x] In-game FPS counter
-- [x] Disable jump for jumpless runs
-- [x] Invert sprint (Sprint by default, shift to walk)
-- [x] Enable in-game timer by default
-- [x] LiveSplit auto splitter
-	- [x] Split by world or by level
-	- [x] Reset in menu
-- [ ] Fix in-game timer accuracy
-- [ ] Airtime timer (for flying% category)
-- [ ] Low grav patch (for LowGrav category)
-- [ ] Randomiser (Levels & abilities)
-- [ ] Multiplayer
-- [ ] Preload 9:10
+- Enable Speedometer
+	- Configurable to show speed in m/s, km/h or mph.
+- Custom Truck Colours
+- Unlock FPS
+	- Up to 240fps, which is the maximum allowed by the SRC leaderboards.
+- Enable FPS counter
+- Disable jump 
+	- For jumpless categories.
+- Invert Sprint Button
+- Enable Timer By Default
+- Enable LiveSplit Autosplitter
+	- Split By World / Split By Level
+	- Reset In Menu
+
+### Features wishlist:
+- Fix in-game timer accuracy
+- Airtime timer (for flying% category)
+- Low grav patch (for LowGrav category)
+- Randomiser (Levels & abilities)
+- Multiplayer
+- Preload 9:10
 
 # How to use
-Put the folder anywhere and run the exe. Select your Clustertruck folder and the desired patches and press the patch button, then launch the game as normal.
-## Autosplitter
-To use the auto splitter just enable it in the patches. To use the auto splitter you must use LiveSplit 1.8.29 or above.
-Make sure any other auto splitters are disabled.
+1. Put the folder anywhere and run the exe.
+2. Select your Clustertruck folder.
+3. Select the desired patches.
+4. Press the "Apply Patches" button.
+5. Launch the game as normal.
+6. To restore, simply press the "Rmove All Patches" button.
+
+### Autosplitter
+To enable the auto splitter just enable it in the patches. Select "Split By World" or "Split By Level" depending on your splits.
+Requirements:
+- You must use LiveSplit 1.8.29 or above. Older versions are not supported.
+- Make sure any other auto splitters, such as the one built into LiveSplit, are disabled.
 
 # Known issues
-- Unpatching after patching doesn't work currently. Just restart the program after which it should work fine.
 - This mod is not compatible with happyrobot33's auto splitter. Instead, use the auto splitter patch provided.
