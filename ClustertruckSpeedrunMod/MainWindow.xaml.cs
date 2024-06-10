@@ -152,6 +152,9 @@ namespace ClustertruckSpeedrunMod
 		private void PatchButton_Click(object sender, RoutedEventArgs e)
 		{
 			Progress(0, "Starting...");
+			AssemblyDefinition gameAssembly = null;
+			AssemblyDefinition patchAssembly = null;
+
 			try
 			{
 				Progress(5, "Setting up paths...");
@@ -199,10 +202,10 @@ namespace ClustertruckSpeedrunMod
 
 				Progress(25, "Reading Assemblies...");
 
-				var gameAssembly = AssemblyDefinition.ReadAssembly(gameAssemblyPathOriginal);
+				gameAssembly = AssemblyDefinition.ReadAssembly(gameAssemblyPathOriginal);
 				var mainModule = gameAssembly.MainModule;
 
-				var patchAssembly = AssemblyDefinition.ReadAssembly(gamePatchPath);
+				patchAssembly = AssemblyDefinition.ReadAssembly(gamePatchPath);
 				mainModule.AssemblyReferences.Add(patchAssembly.Name);
 
 				Progress(35, "Setting up Entrypoint...");
@@ -265,6 +268,11 @@ namespace ClustertruckSpeedrunMod
 				}
 
 				Progress(0, "Patching interrupted :(");
+			}
+			finally
+			{
+				gameAssembly?.Dispose();
+				patchAssembly?.Dispose();
 			}
 		}
 
