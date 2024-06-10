@@ -13,6 +13,7 @@ If you have any feature requests or want to report a bug, make sure to submit an
 - [Features](#features)
 - [How to use](#how-to-use)
 - [Known issues](#known-issues)
+- [FAQ](#faq)
 ***
 
 # Features
@@ -26,7 +27,7 @@ If you have any feature requests or want to report a bug, make sure to submit an
 	- For jumpless categories.
 - Invert Sprint Button
 - Enable Timer By Default
-- Enable LiveSplit Autosplitter
+- Enable LiveSplit Auto splitter
 	- Split By World / Split By Level
 	- Reset In Menu
 
@@ -44,9 +45,9 @@ If you have any feature requests or want to report a bug, make sure to submit an
 3. Select the desired patches.
 4. Press the "Apply Patches" button.
 5. Launch the game as normal.
-6. To restore, simply press the "Rmove All Patches" button.
+6. To restore, simply press the "Remove All Patches" button.
 
-### Autosplitter
+### Auto splitter
 To enable the auto splitter just enable it in the patches. Select "Split By World" or "Split By Level" depending on your splits.
 Requirements:
 - You must use LiveSplit 1.8.29 or above. Older versions are not supported.
@@ -54,3 +55,26 @@ Requirements:
 
 # Known issues
 - This mod is not compatible with happyrobot33's auto splitter. Instead, use the auto splitter patch provided.
+
+# FAQ
+**It's asking me to install something called .NET Desktop Runtime?**
+That's correct. It's needed to run the application. (It's not a virus. Promise.)
+
+**I inverted sprint but I'm not sprinting?**
+You probably still have sprint bound to 'w' and now that Invert Sprint is on, you're always holding the 'walk' button. Set sprint back to left shift.
+
+**Can I submit a run to the SRC leaderboards with the speedometer enabled?**
+No.
+
+**I set my FPS to 240 but I'm only getting x?**
+Your pc probably can't render more than x.
+
+**My auto splitter isn't working?**
+Make sure you are using the latest version of LiveSplit, have the auto splitter patch enabled and have deactivated the auto splitter option built into LiveSplit.
+
+**Why does my auto splitter not split when I finish the level?**
+You probably have it set to Split by World. Change the setting to Split by Level.
+
+**My jump button doesn't work anymore!**
+You've probably enabled the jumpless patch. Re-patch the game with it disabled.
+
