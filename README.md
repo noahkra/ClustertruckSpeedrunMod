@@ -58,23 +58,30 @@ Requirements:
 
 # FAQ
 **It's asking me to install something called .NET Desktop Runtime?**
+
 That's correct. It's needed to run the application. (It's not a virus. Promise.)
 
 **I inverted sprint but I'm not sprinting?**
+
 You probably still have sprint bound to 'w' and now that Invert Sprint is on, you're always holding the 'walk' button. Set sprint back to left shift.
 
 **Can I submit a run to the SRC leaderboards with the speedometer enabled?**
+
 No.
 
 **I set my FPS to 240 but I'm only getting x?**
+
 Your pc probably can't render more than x.
 
 **My auto splitter isn't working?**
+
 Make sure you are using the latest version of LiveSplit, have the auto splitter patch enabled and have deactivated the auto splitter option built into LiveSplit.
 
 **Why does my auto splitter not split when I finish the level?**
+
 You probably have it set to Split by World. Change the setting to Split by Level.
 
 **My jump button doesn't work anymore!**
+
 You've probably enabled the jumpless patch. Re-patch the game with it disabled.
 
