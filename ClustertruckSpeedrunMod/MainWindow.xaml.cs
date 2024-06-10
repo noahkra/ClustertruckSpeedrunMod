@@ -15,6 +15,8 @@ namespace ClustertruckSpeedrunMod
 		{
 			InitializeComponent();
 
+			TargetFPS.ValueChanged += TargetFPS_ValueChanged;
+
 			LoadSettings();
 
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
