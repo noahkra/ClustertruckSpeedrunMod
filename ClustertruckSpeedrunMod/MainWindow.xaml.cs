@@ -15,20 +15,6 @@ namespace ClustertruckSpeedrunMod
 		{
 			InitializeComponent();
 
-			EnableTruckColor.Checked += EnableTruckColor_Checked;
-			EnableTruckColor.Unchecked += EnableTruckColor_Unchecked;
-
-			EnableSpeedometer.Checked += EnableSpeedometer_Checked;
-			EnableSpeedometer.Unchecked += EnableSpeedometer_Unchecked;
-
-			UnlockFPS.Checked += UnlockFPS_Checked;
-			UnlockFPS.Unchecked += UnlockFPS_Unchecked;
-
-			TargetFPS.ValueChanged += TargetFPS_ValueChanged;
-
-			EnableLivesplit.Checked += EnableLivesplit_Checked;
-			EnableLivesplit.Unchecked += EnableLivesplit_Unchecked;
-
 			LoadSettings();
 
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");

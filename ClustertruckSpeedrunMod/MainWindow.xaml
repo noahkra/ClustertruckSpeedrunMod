@@ -13,10 +13,10 @@
             <Button x:Name="BrowseFolders" Content="Browse" Margin="503,0,0,0" VerticalAlignment="Top" Height="20" Click="BrowseFolders_Click"/>
         </Grid>
         <Grid Margin="10,40,279,40">
-            <CheckBox x:Name="EnableSpeedometer" Content="Enable Speedometer (For practice only!)" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
-            <CheckBox x:Name="EnableTruckColor" Content="Custom Truck Colours:" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <CheckBox x:Name="EnableSpeedometer" Checked="EnableSpeedometer_Checked" Unchecked="EnableSpeedometer_Unchecked" Content="Enable Speedometer (For practice only!)" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+            <CheckBox x:Name="EnableTruckColor" Checked="EnableTruckColor_Checked" Unchecked="EnableTruckColor_Unchecked" Content="Custom Truck Colours:" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
             <TextBox x:Name="TruckColor" HorizontalAlignment="Left" Margin="32,70,0,0" TextWrapping="Wrap" Text="#FFFFFF" VerticalAlignment="Top" Width="124" IsEnabled="False"/>
-            <CheckBox x:Name="UnlockFPS" Content="Unlock FPS:" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Width="290" Margin="0,93,0,0"/>
+            <CheckBox x:Name="UnlockFPS" Checked="UnlockFPS_Checked" Unchecked="UnlockFPS_Unchecked" Content="Unlock FPS:" HorizontalAlignment="Center" VerticalAlignment="Top" Height="20" Width="290" Margin="0,93,0,0"/>
             <Slider x:Name="TargetFPS" HorizontalAlignment="Left" Height="18" Margin="32,113,0,0" VerticalAlignment="Top" Width="238" Maximum="240" SmallChange="1" TickFrequency="10" Minimum="90" LargeChange="10" IsEnabled="False"/>
             <CheckBox x:Name="EnableFPSCounter" Content="Enable FPS Counter" HorizontalAlignment="Center" Margin="0,136,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
             <CheckBox x:Name="DisableJump" Content="Disable Jump (For jumpless categories)" HorizontalAlignment="Center" Margin="0,156,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
@@ -27,7 +27,7 @@
             <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" HorizontalAlignment="Left" Margin="76,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
             <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" HorizontalAlignment="Left" Margin="128,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
             <Grid Margin="0,221,0,0">
-                <CheckBox x:Name="EnableLivesplit" Content="Enable LiveSplit Autosplitter (1.8.29+)" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
+                <CheckBox x:Name="EnableLivesplit" Checked="EnableLivesplit_Checked" Unchecked="EnableLivesplit_Unchecked" Content="Enable LiveSplit Autosplitter (1.8.29+)" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Height="20" Width="290"/>
                 <RadioButton x:Name="SplitByWorld" GroupName="SplitBy" Content="Split By World" HorizontalAlignment="Left" Margin="32,30,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
                 <RadioButton x:Name="SplitByLevel" GroupName="SplitBy" Content="Split By Level" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                 <CheckBox x:Name="SplitResetInMenu" Content="Reset In Menu" HorizontalAlignment="Left" Margin="31,50,0,0" VerticalAlignment="Top" Height="20" Width="290" IsEnabled="False"/>
