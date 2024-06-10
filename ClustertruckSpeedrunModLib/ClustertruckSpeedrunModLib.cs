@@ -13,9 +13,9 @@ namespace ClustertruckSpeedrunModLib
 {
 	public static class Autosplitter
 	{
-		public static NamedPipeClientStream client;
-		public static StreamReader pipeReader;
-		public static StreamWriter pipeWriter;
+		public static NamedPipeClientStream client = null;
+		public static StreamReader pipeReader = null;
+		public static StreamWriter pipeWriter = null;
 		public static bool FirstSplit;
 
 		public static void Connect()
@@ -84,9 +84,9 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
-		public static Rigidbody playRig;
+		public static Rigidbody playRig = null;
 		public static int FPSinterval;
-		public static string prevFPS;
+		public static string prevFPS = null;
 		public static float avgFPS;
 
 		// Preferences
@@ -295,7 +295,7 @@ namespace ClustertruckSpeedrunModLib
 			harmony.Patch(original, postfix: new HarmonyMethod(patch));
 		}
 
-		public static void Postfix(PlayerClock __instance, ref Text ____TimeText, ref Text ____NameText, string val)
+		public static void Postfix(ref Text ____TimeText, ref Text ____NameText, string val)
 		{
 			____TimeText.alignment = TextAnchor.LowerRight;
 			Patcher.avgFPS += Time.unscaledDeltaTime;
@@ -310,7 +310,7 @@ namespace ClustertruckSpeedrunModLib
 				Patcher.FPSinterval = 0;
 			}
 
-			string velocity;
+			string velocity = null;
 
 			switch (Patcher.SpeedUnit)
 			{
