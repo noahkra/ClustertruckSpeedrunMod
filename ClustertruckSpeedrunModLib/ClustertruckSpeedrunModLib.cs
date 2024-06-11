@@ -23,27 +23,84 @@ namespace ClustertruckSpeedrunModLib
 			try
 			{
 				client = new NamedPipeClientStream(".", "LiveSplit");
-				client.Connect();
+				client.Connect(1000);
 
 				if (client.IsConnected)
 				{
+					Console.WriteLine($"[SPEEDRUNMOD] Connection to LiveSplit established!");
+
 					pipeReader = new StreamReader(client);
 					pipeWriter = new StreamWriter(client);
 				}
-			}
+			} 
+			catch (TimeoutException)
+			{
+				Console.WriteLine("[SPEEDRUNMOD] Connection timed out. LiveSplit may not be running.");
+				Disconnect();
+			} 
+			catch (IOException e)
+			{
+				Console.WriteLine($"[SPEEDRUNMOD] IOException: {e.Message}");
+				Disconnect();
+			} 
 			catch (Exception ex)
 			{
-				Console.WriteLine($"[SPEEDRUNMOD] {ex.Message}");
+				Console.WriteLine($"[SPEEDRUNMOD] Exception: {ex.Message}");
+				Disconnect();
 			}
 
 		}
 
+		public static void Disconnect()
+		{
+			if (pipeWriter != null) pipeWriter.Close();
+			if (pipeReader != null) pipeReader.Close();
+			if (client!= null) { client.Close(); client = null; }
+
+			Console.WriteLine($"[SPEEDRUNMOD] Disconnected from LiveSplit");
+		}
+
+		public static bool IsConnected()
+		{
+			try
+			{
+				return client != null && client.IsConnected;
+			} 
+			catch (Exception e)
+			{
+				Console.WriteLine($"[SPEEDRUNMOD] Exception while checking connection: {e.Message}");
+				return false;
+			}
+		}
+
 		static void SendMessage(string message)
 		{
-			if (client.IsConnected)
+			try
 			{
+				if (!IsConnected())
+				{
+					Console.WriteLine($"[SPEEDRUNMOD] Lost connection to LiveSplit. Reconnecting...");
+					Connect();
+
+					if (!IsConnected())
+					{
+						Console.WriteLine($"[SPEEDRUNMOD] Failed to reconnect to LiveSplit.");
+						return;
+					}
+				}
+
 				pipeWriter.WriteLine(message);
 				pipeWriter.Flush();
+			} 
+			catch (IOException e)
+			{
+				Console.WriteLine($"[SPEEDRUNMOD] IOException: {e.Message}");
+				Disconnect();
+			} 
+			catch (Exception e)
+			{
+				Console.WriteLine($"[SPEEDRUNMOD] Exception: {e.Message}");
+				Disconnect();
 			}
 		}
 
@@ -75,7 +132,7 @@ namespace ClustertruckSpeedrunModLib
 		public static int GetSplitIndex()
 		{
 			SendMessage("getsplitindex");
-			if (client.IsConnected) {
+			if (IsConnected()) {
 				return int.Parse(pipeReader.ReadLine());
 			}
 			return -1;
@@ -84,6 +141,8 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
+		readonly public static string version = "1.0.1";
+
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
 		public static string prevFPS = null;
@@ -226,7 +285,7 @@ namespace ClustertruckSpeedrunModLib
 		}
 
 		public static void MenuResetPostfix() {
-			if (!Autosplitter.client.IsConnected)
+			if (!Autosplitter.IsConnected())
 			{
 				Autosplitter.Connect();
 			}
@@ -254,7 +313,7 @@ namespace ClustertruckSpeedrunModLib
 			Text playButtonText = __instance.leftMask.Find("Main").Find("play").Find("Text").GetComponent<Text>();
 			GameObject title = new GameObject("SpeedrunmodTitle");
 			Text titleText = title.AddComponent<Text>();
-			titleText.text = "Clustertruck Speedrun Mod v1.0.0";
+			titleText.text = $"Clustertruck Speedrun Mod v{Patcher.version}";
 			titleText.font = playButtonText.font;
 			titleText.color = playButtonText.color;
 			titleText.fontSize = 32;

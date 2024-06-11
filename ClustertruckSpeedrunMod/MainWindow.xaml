@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClustertruckSpeedrunMod"
         mc:Ignorable="d"
-        Title="Clustertruck Speedrun Mod v1.0.0 PATCHER" Height="450" Width="598" ResizeMode="NoResize" HorizontalAlignment="Center" VerticalAlignment="Center" SizeToContent="WidthAndHeight">
+        Title="Clustertruck Speedrun Mod v1.0.1 PATCHER" Height="450" Width="598" ResizeMode="NoResize" HorizontalAlignment="Center" VerticalAlignment="Center" SizeToContent="WidthAndHeight">
     <Grid>
         <Grid Margin="10,10,10,399">
             <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Clustertruck Folder:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Height="20"/>
