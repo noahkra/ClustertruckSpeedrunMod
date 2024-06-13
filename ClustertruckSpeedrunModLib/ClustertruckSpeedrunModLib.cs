@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO.Pipes;
 using System.IO;
+using System.Diagnostics;
 
 namespace ClustertruckSpeedrunModLib
 {
@@ -53,8 +54,8 @@ namespace ClustertruckSpeedrunModLib
 
 		public static void Disconnect()
 		{
-			if (pipeWriter != null) pipeWriter.Close();
-			if (pipeReader != null) pipeReader.Close();
+			if (pipeWriter != null) { pipeWriter.Close(); pipeWriter = null; }
+			if (pipeReader != null) { pipeReader.Close(); pipeReader = null; }
 			if (client!= null) { client.Close(); client = null; }
 
 			Console.WriteLine($"[SPEEDRUNMOD] Disconnected from LiveSplit");
@@ -141,12 +142,13 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
-		readonly public static string version = "1.0.1";
+		readonly public static string version = "1.1.0";
 
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
 		public static string prevFPS = null;
 		public static float avgFPS;
+		public static Stopwatch stopwatch = new Stopwatch();
 
 		// Preferences
 		public static bool EnableSpeedometer;
@@ -160,13 +162,16 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableLivesplit;
 		public static bool SplitByLevel;
 		public static bool SplitResetInMenu;
+		public static bool CursorDeathLock;
+		public static bool EnableTimerFix;
 
 		public static void DoPatching(
 			bool _enableSpeedometer, int _speedUnit,
 			float _truckColorR, float _truckColorG, float _truckColorB,
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
-			bool _splitByLevel, bool _splitResetInMenu)
+			bool _splitByLevel, bool _splitResetInMenu, bool _cursorDeathLock,
+			bool _enableTimerFix)
 		{
 			FPSinterval = 0;
 
@@ -181,6 +186,8 @@ namespace ClustertruckSpeedrunModLib
 			EnableLivesplit = _enableLivesplit;
 			SplitByLevel = _splitByLevel;
 			SplitResetInMenu = _splitResetInMenu;
+			CursorDeathLock = _cursorDeathLock;
+			EnableTimerFix = _enableTimerFix;
 
 			try
 			{
@@ -225,6 +232,12 @@ namespace ClustertruckSpeedrunModLib
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying ShowTimerPatch...");
 					ShowTimerPatch.Apply(harmony);
+				}
+
+				if (EnableTimerFix)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying TimerFixPatch...");
+					TimerFixPatch.Apply(harmony);
 				}
 
 				Console.WriteLine("[SPEEDRUNMOD] All patches applied successfully!");
@@ -294,7 +307,49 @@ namespace ClustertruckSpeedrunModLib
 				Autosplitter.Reset();
 			}
 		}
-	}	
+	}
+	static class TimerFixPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var StopOriginal = typeof(steam_WorkshopHandler).GetMethod(nameof(steam_WorkshopHandler.UploadScoreToLeaderBoard));
+			var StartOriginal = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+			var TimerUpdateOriginal = typeof(GameManager).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var StopPatch = typeof(TimerFixPatch).GetMethod(nameof(StopPostfix));
+			var startPatch = typeof(TimerFixPatch).GetMethod(nameof(StartPrefix));
+			var TimeUpdatePatch = typeof(TimerFixPatch).GetMethod(nameof(TimeUpdatePrefix));
+
+			harmony.Patch(StopOriginal, postfix: new HarmonyMethod(StopPatch));
+			harmony.Patch(StartOriginal, prefix: new HarmonyMethod(startPatch));
+			harmony.Patch(TimerUpdateOriginal, prefix: new HarmonyMethod(TimeUpdatePatch));
+		}
+
+		public static void StopPostfix()
+		{
+			Patcher.stopwatch.Stop();
+		}
+
+		public static void StartPrefix(player __instance)
+		{
+			if (__instance.framesSinceStart == 0f)
+			{
+				Patcher.stopwatch.Reset();
+				Patcher.stopwatch.Start();
+			}
+		}
+
+		public static void TimeUpdatePrefix(PlayerClock ___PlayerClock)
+		{
+			if (Patcher.EnableTimerFix)
+			{
+				if (Patcher.stopwatch.IsRunning)
+				{
+					___PlayerClock.SetTimeText("this literally doesn't matter it'll get replaced anyway lol");
+				}
+			}
+		}
+	}
 
 	static class MenuTitlePatch
 	{
@@ -384,6 +439,24 @@ namespace ClustertruckSpeedrunModLib
 					break;
 			}
 
+			if (Patcher.EnableTimerFix)
+			{
+				TimeSpan ts = Patcher.stopwatch.Elapsed;
+
+				if (ts.Hours > 0)
+				{
+					val = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+				}
+				if (ts.Minutes > 0)
+				{
+					val = string.Format("{0:00}:{1:00}.{2:000}", ts.Minutes, ts.Seconds, ts.Milliseconds);
+				}
+				else
+				{
+					val = string.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
+				}
+			}
+			
 			____NameText.text = String.Empty;
 			____TimeText.text = $"{ (Patcher.DisableJump ? "Jumpless\n\n" : "") }{ (Patcher.EnableSpeedometer ? $"{velocity}\n\n" : "") }{ (Patcher.EnableFPSCounter ? $"{Patcher.prevFPS}fps\n" : "") }{ val }";
 		}

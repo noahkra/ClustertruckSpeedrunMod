@@ -44,6 +44,10 @@ namespace ClustertruckSpeedrunMod
 			SplitByLevel.Unchecked += ResetProgress;
 			SplitResetInMenu.Checked += ResetProgress;
 			SplitResetInMenu.Unchecked += ResetProgress;
+			CursorDeathLock.Checked += ResetProgress;
+			CursorDeathLock.Unchecked += ResetProgress;
+			EnableTimerFix.Checked += ResetProgress;
+			EnableTimerFix.Unchecked += ResetProgress;
 		}
 
 		private void EnableLivesplit_Unchecked(object sender, RoutedEventArgs e)
@@ -153,6 +157,8 @@ namespace ClustertruckSpeedrunMod
 			Properties.Settings.Default.EnableLivesplit = (bool)EnableLivesplit.IsChecked;
 			Properties.Settings.Default.SplitByLevel = (bool)SplitByLevel.IsChecked;
 			Properties.Settings.Default.SplitResetInMenu = (bool)SplitResetInMenu.IsChecked;
+			Properties.Settings.Default.CursorDeathLock = (bool)CursorDeathLock.IsChecked;
+			Properties.Settings.Default.EnableTimerFix = (bool)EnableTimerFix.IsChecked;
 			Properties.Settings.Default.Save();
 		}
 
@@ -172,6 +178,8 @@ namespace ClustertruckSpeedrunMod
 			EnableLivesplit.IsChecked = Properties.Settings.Default.EnableLivesplit;
 			SplitByLevel.IsChecked = Properties.Settings.Default.SplitByLevel;
 			SplitResetInMenu.IsChecked = Properties.Settings.Default.SplitResetInMenu;
+			CursorDeathLock.IsChecked = Properties.Settings.Default.CursorDeathLock;
+			EnableTimerFix.IsChecked = Properties.Settings.Default.EnableTimerFix;
 		}
 
 		private void PatchButton_Click(object sender, RoutedEventArgs e)
@@ -263,6 +271,8 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableLivesplit.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableLivesplit
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)SplitByLevel.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // SplitByLevel
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)SplitResetInMenu.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // SplitResetInMenu
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)CursorDeathLock.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // CursorDeathLock
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableTimerFix.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableTimerFix
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Call, mainModule.ImportReference(patchMethod)));
 

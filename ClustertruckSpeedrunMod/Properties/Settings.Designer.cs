@@ -190,5 +190,29 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["SplitResetInMenu"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool CursorDeathLock {
+            get {
+                return ((bool)(this["CursorDeathLock"]));
+            }
+            set {
+                this["CursorDeathLock"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableTimerFix {
+            get {
+                return ((bool)(this["EnableTimerFix"]));
+            }
+            set {
+                this["EnableTimerFix"] = value;
+            }
+        }
     }
 }
