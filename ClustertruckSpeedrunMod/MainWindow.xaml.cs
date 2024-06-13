@@ -258,21 +258,21 @@ namespace ClustertruckSpeedrunMod
 
 					var color = System.Drawing.ColorTranslator.FromHtml((bool)EnableTruckColor.IsChecked ? TruckColor.Text : "#FFFFFF");
 
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableSpeedometer.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableSpeedometer
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableSpeedometer.IsChecked))); // EnableSpeedometer
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_I4, GetSpeedUnitInt())); // SpeedUnit
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.R / 255f)); // TruckColor.r
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.G / 255f)); // TruckColor.g
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.B / 255f)); // TruckColor.b
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_I4, (bool)UnlockFPS.IsChecked ? (int)TargetFPS.Value : 90)); // TargetFramerate
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableFPSCounter.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableFPSCounter
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)DisableJump.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // DisableJump
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)InvertSprint.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // InvertSprint
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableTimer.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableTimer
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableLivesplit.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableLivesplit
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)SplitByLevel.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // SplitByLevel
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)SplitResetInMenu.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // SplitResetInMenu
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)CursorDeathLock.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // CursorDeathLock
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create((bool)EnableTimerFix.IsChecked ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0)); // EnableTimerFix
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableFPSCounter.IsChecked))); // EnableFPSCounter
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(DisableJump.IsChecked))); // DisableJump
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(InvertSprint.IsChecked))); // InvertSprint
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTimer.IsChecked))); // EnableTimer
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableLivesplit.IsChecked))); // EnableLivesplit
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitByLevel.IsChecked))); // SplitByLevel
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitResetInMenu.IsChecked))); // SplitResetInMenu
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(CursorDeathLock.IsChecked))); // CursorDeathLock
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTimerFix.IsChecked))); // EnableTimerFix
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Call, mainModule.ImportReference(patchMethod)));
 
@@ -326,6 +326,15 @@ namespace ClustertruckSpeedrunMod
 		{
 			ProgressVal.Value = val;
 			ProgressText.Text = msg;
+		}
+
+		OpCode BoolToOpCode(bool? a)
+		{
+			if (a == null)
+			{
+				return OpCodes.Ldc_I4_0;
+			}
+			return a ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
 		}
 
 		private void UnpatchButton_Click(object sender, RoutedEventArgs e)
