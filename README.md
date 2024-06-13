@@ -27,12 +27,13 @@ If you have any feature requests or want to report a bug, make sure to submit an
 	- For jumpless categories.
 - Invert Sprint Button
 - Enable Timer By Default
+- Fix in-game timer accuracy
+- Confine cursor to the game window
 - Enable LiveSplit Auto splitter
 	- Split By World / Split By Level
 	- Reset In Menu
 
 ### Features wishlist:
-- Fix in-game timer accuracy
 - Airtime timer (for flying% category)
 - Low grav patch (for LowGrav category)
 - Randomiser (Levels & abilities)

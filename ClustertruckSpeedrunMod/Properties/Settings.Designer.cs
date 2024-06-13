@@ -194,12 +194,12 @@ namespace ClustertruckSpeedrunMod.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool CursorDeathLock {
+        public bool ConfineCursor {
             get {
-                return ((bool)(this["CursorDeathLock"]));
+                return ((bool)(this["ConfineCursor"]));
             }
             set {
-                this["CursorDeathLock"] = value;
+                this["ConfineCursor"] = value;
             }
         }
         

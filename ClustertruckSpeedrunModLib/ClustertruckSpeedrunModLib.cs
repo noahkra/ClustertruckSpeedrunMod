@@ -162,7 +162,7 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableLivesplit;
 		public static bool SplitByLevel;
 		public static bool SplitResetInMenu;
-		public static bool CursorDeathLock;
+		public static bool ConfineCursor;
 		public static bool EnableTimerFix;
 
 		public static void DoPatching(
@@ -170,7 +170,7 @@ namespace ClustertruckSpeedrunModLib
 			float _truckColorR, float _truckColorG, float _truckColorB,
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
-			bool _splitByLevel, bool _splitResetInMenu, bool _cursorDeathLock,
+			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
 			bool _enableTimerFix)
 		{
 			FPSinterval = 0;
@@ -186,7 +186,7 @@ namespace ClustertruckSpeedrunModLib
 			EnableLivesplit = _enableLivesplit;
 			SplitByLevel = _splitByLevel;
 			SplitResetInMenu = _splitResetInMenu;
-			CursorDeathLock = _cursorDeathLock;
+			ConfineCursor = _confineCursor;
 			EnableTimerFix = _enableTimerFix;
 
 			try
@@ -238,6 +238,12 @@ namespace ClustertruckSpeedrunModLib
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying TimerFixPatch...");
 					TimerFixPatch.Apply(harmony);
+				}
+
+				if (ConfineCursor)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying ConfineCursorPatch...");
+					ConfineCursorPatch.Apply(harmony);
 				}
 
 				Console.WriteLine("[SPEEDRUNMOD] All patches applied successfully!");
@@ -308,6 +314,24 @@ namespace ClustertruckSpeedrunModLib
 			}
 		}
 	}
+	
+	static class ConfineCursorPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var original = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var patch = typeof(ConfineCursorPatch).GetMethod(nameof(Prefix));
+
+			harmony.Patch(original, prefix: new HarmonyMethod(patch));
+		}
+
+		public static void Prefix(player __instance)
+		{
+			Cursor.lockState = CursorLockMode.Confined;
+		}
+	}
+
 	static class TimerFixPatch
 	{
 		public static void Apply(Harmony harmony)

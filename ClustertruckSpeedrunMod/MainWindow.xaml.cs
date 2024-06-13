@@ -44,8 +44,8 @@ namespace ClustertruckSpeedrunMod
 			SplitByLevel.Unchecked += ResetProgress;
 			SplitResetInMenu.Checked += ResetProgress;
 			SplitResetInMenu.Unchecked += ResetProgress;
-			CursorDeathLock.Checked += ResetProgress;
-			CursorDeathLock.Unchecked += ResetProgress;
+			ConfineCursor.Checked += ResetProgress;
+			ConfineCursor.Unchecked += ResetProgress;
 			EnableTimerFix.Checked += ResetProgress;
 			EnableTimerFix.Unchecked += ResetProgress;
 		}
@@ -157,7 +157,7 @@ namespace ClustertruckSpeedrunMod
 			Properties.Settings.Default.EnableLivesplit = (bool)EnableLivesplit.IsChecked;
 			Properties.Settings.Default.SplitByLevel = (bool)SplitByLevel.IsChecked;
 			Properties.Settings.Default.SplitResetInMenu = (bool)SplitResetInMenu.IsChecked;
-			Properties.Settings.Default.CursorDeathLock = (bool)CursorDeathLock.IsChecked;
+			Properties.Settings.Default.ConfineCursor = (bool)ConfineCursor.IsChecked;
 			Properties.Settings.Default.EnableTimerFix = (bool)EnableTimerFix.IsChecked;
 			Properties.Settings.Default.Save();
 		}
@@ -178,7 +178,7 @@ namespace ClustertruckSpeedrunMod
 			EnableLivesplit.IsChecked = Properties.Settings.Default.EnableLivesplit;
 			SplitByLevel.IsChecked = Properties.Settings.Default.SplitByLevel;
 			SplitResetInMenu.IsChecked = Properties.Settings.Default.SplitResetInMenu;
-			CursorDeathLock.IsChecked = Properties.Settings.Default.CursorDeathLock;
+			ConfineCursor.IsChecked = Properties.Settings.Default.ConfineCursor;
 			EnableTimerFix.IsChecked = Properties.Settings.Default.EnableTimerFix;
 		}
 
@@ -271,7 +271,7 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableLivesplit.IsChecked))); // EnableLivesplit
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitByLevel.IsChecked))); // SplitByLevel
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitResetInMenu.IsChecked))); // SplitResetInMenu
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(CursorDeathLock.IsChecked))); // CursorDeathLock
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(ConfineCursor.IsChecked))); // ConfineCursor
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTimerFix.IsChecked))); // EnableTimerFix
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Call, mainModule.ImportReference(patchMethod)));
@@ -334,7 +334,7 @@ namespace ClustertruckSpeedrunMod
 			{
 				return OpCodes.Ldc_I4_0;
 			}
-			return a ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
+			return (bool)a ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0;
 		}
 
 		private void UnpatchButton_Click(object sender, RoutedEventArgs e)
