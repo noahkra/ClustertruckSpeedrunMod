@@ -13,15 +13,15 @@
             <Button x:Name="BrowseFolders" Content="Browse" Margin="503,0,0,0" VerticalAlignment="Top" Height="20" Click="BrowseFolders_Click"/>
         </Grid>
         <StackPanel Margin="10,40,289,30">
-            <CheckBox x:Name="EnableSpeedometer" Checked="EnableSpeedometer_Checked" Unchecked="EnableSpeedometer_Unchecked" Content="Enable Speedometer (For practice only!)" Height="20" Width="290"/>
+            <CheckBox x:Name="EnableSpeedometer" Checked="EnableSpeedometer_CheckChanged" Unchecked="EnableSpeedometer_CheckChanged" Content="Enable Speedometer (For practice only!)" Height="20" Width="290"/>
             <Grid Height="20">
                 <RadioButton x:Name="mps" GroupName="SpeedUnit" Content="m/s" HorizontalAlignment="Left" Margin="32,0,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
                 <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" HorizontalAlignment="Left" Margin="76,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                 <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" HorizontalAlignment="Left" Margin="128,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
             </Grid>
-            <CheckBox x:Name="EnableTruckColor" Checked="EnableTruckColor_Checked" Unchecked="EnableTruckColor_Unchecked" Content="Custom Truck Colours:" Height="20" Width="290"/>
+            <CheckBox x:Name="EnableTruckColor" Checked="EnableTruckColor_CheckChanged" Unchecked="EnableTruckColor_CheckChanged" Content="Custom Truck Colours:" Height="20" Width="290"/>
             <TextBox x:Name="TruckColor" TextWrapping="Wrap" Text="#FFFFFF" Width="124" IsEnabled="False" HorizontalAlignment="Left" Margin="30,0,0,10"/>
-            <CheckBox x:Name="UnlockFPS" Checked="UnlockFPS_Checked" Unchecked="UnlockFPS_Unchecked" Content="Unlock FPS:" Height="20" Width="290"/>
+            <CheckBox x:Name="UnlockFPS" Checked="UnlockFPS_CheckChanged" Unchecked="UnlockFPS_CheckChanged" Content="Unlock FPS:" Height="20" Width="290"/>
             <Grid Height="22" HorizontalAlignment="Left">
                 <Slider x:Name="TargetFPS" Width="238" Maximum="240" SmallChange="1" TickFrequency="10" Minimum="90" LargeChange="10" IsEnabled="False" HorizontalAlignment="Left" Margin="30,0,0,0"/>
                 <TextBlock x:Name="TargetFPSValue" TextWrapping="Wrap" Text="240" Margin="273,0,0,0"/>
@@ -32,7 +32,7 @@
             <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" Height="20" Width="290"/>
             <CheckBox x:Name="EnableTimerFix" Content="Enable Timer Fix" Height="20" Width="290"/>
             <CheckBox x:Name="ConfineCursor" Content="Confine Cursor To The Game Window" Height="20" Width="290"/>
-            <CheckBox x:Name="EnableLivesplit" Checked="EnableLivesplit_Checked" Unchecked="EnableLivesplit_Unchecked" Content="Enable LiveSplit Autosplitter (1.8.29+)" Height="20" Width="290" Margin="0,10,0,0"/>
+            <CheckBox x:Name="EnableLivesplit" Checked="EnableLivesplit_CheckChanged" Unchecked="EnableLivesplit_CheckChanged" Content="Enable LiveSplit Autosplitter (1.8.29+)" Height="20" Width="290" Margin="0,10,0,0"/>
             <Grid Height="133" Width="309">
                 <RadioButton x:Name="SplitByWorld" GroupName="SplitBy" Content="Split By World" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
                 <RadioButton x:Name="SplitByLevel" GroupName="SplitBy" Content="Split By Level" HorizontalAlignment="Left" Margin="128,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>

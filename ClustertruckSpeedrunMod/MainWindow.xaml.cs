@@ -50,51 +50,32 @@ namespace ClustertruckSpeedrunMod
 			}
 		}
 
-		private void EnableLivesplit_Unchecked(object sender, RoutedEventArgs e)
+		private void EnableLivesplit_CheckChanged(object sender, RoutedEventArgs e)
 		{
-			SplitByLevel.IsEnabled = false;
-			SplitByWorld.IsEnabled = false;
-			SplitResetInMenu.IsEnabled = false;
+			bool isChecked = (bool)((CheckBox)sender).IsChecked;
+			SplitByLevel.IsEnabled = isChecked;
+			SplitByWorld.IsEnabled = isChecked;
+			SplitResetInMenu.IsEnabled = isChecked;
 		}
 
-		private void EnableLivesplit_Checked(object sender, RoutedEventArgs e)
+		private void EnableTruckColor_CheckChanged(object sender, RoutedEventArgs e)
 		{
-			SplitByLevel.IsEnabled = true;
-			SplitByWorld.IsEnabled = true;
-			SplitResetInMenu.IsEnabled = true;
-		}
-		private void EnableTruckColor_Checked(object sender, RoutedEventArgs e)
-		{
-			TruckColor.IsEnabled = true;
+			bool isChecked = (bool)((CheckBox)sender).IsChecked;
+			TruckColor.IsEnabled = isChecked;
 		}
 
-		private void EnableTruckColor_Unchecked(object sender, RoutedEventArgs e)
+		private void EnableSpeedometer_CheckChanged(object sender, RoutedEventArgs e)
 		{
-			TruckColor.IsEnabled = false;
+			bool isChecked = (bool)((CheckBox)sender).IsChecked;
+			mps.IsEnabled = isChecked;
+			kmph.IsEnabled = isChecked;
+			mph.IsEnabled = isChecked;
 		}
 
-		private void EnableSpeedometer_Checked(object sender, RoutedEventArgs e)
+		private void UnlockFPS_CheckChanged(object sender, RoutedEventArgs e)
 		{
-			mps.IsEnabled = true;
-			kmph.IsEnabled = true;
-			mph.IsEnabled = true;
-		}
-
-		private void EnableSpeedometer_Unchecked(object sender, RoutedEventArgs e)
-		{
-			mps.IsEnabled = false;
-			kmph.IsEnabled = false;
-			mph.IsEnabled = false;
-		}
-
-		private void UnlockFPS_Checked(object sender, RoutedEventArgs e)
-		{
-			TargetFPS.IsEnabled = true;
-		}
-
-		private void UnlockFPS_Unchecked(object sender, RoutedEventArgs e)
-		{
-			TargetFPS.IsEnabled = false;
+			bool isChecked = (bool)((CheckBox)sender).IsChecked;
+			TargetFPS.IsEnabled = isChecked;
 		}
 
 		private void TargetFPS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
