@@ -26,12 +26,12 @@ namespace ClustertruckSpeedrunMod.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ClustertruckPath {
+        public string FolderPath {
             get {
-                return ((string)(this["ClustertruckPath"]));
+                return ((string)(this["FolderPath"]));
             }
             set {
-                this["ClustertruckPath"] = value;
+                this["FolderPath"] = value;
             }
         }
         

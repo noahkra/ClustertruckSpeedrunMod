@@ -1,10 +1,11 @@
-﻿using System.Windows;
-using System.IO;
-using Mono.Cecil;
-using Mono.Cecil.Cil;
-using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Reflection;
+using System.Windows;
+using Mono.Cecil.Cil;
+using Mono.Cecil;
+using System.IO;
 
 namespace ClustertruckSpeedrunMod
 {
@@ -108,45 +109,74 @@ namespace ClustertruckSpeedrunMod
 			}
 		}
 
-		void SaveSettings(object sender = null, RoutedEventArgs e = null)
+		FrameworkElement FindControlByName(string name)
 		{
-			Properties.Settings.Default.ClustertruckPath = FolderPath.Text;
-			Properties.Settings.Default.EnableSpeedometer = (bool)EnableSpeedometer.IsChecked;
-			Properties.Settings.Default.EnableTruckColor = (bool)EnableTruckColor.IsChecked;
-			Properties.Settings.Default.TruckColor = TruckColor.Text;
-			Properties.Settings.Default.UnlockFPS = (bool)UnlockFPS.IsChecked;
-			Properties.Settings.Default.TargetFPS = (int)TargetFPS.Value;
-			Properties.Settings.Default.EnableFPSCounter = (bool)EnableFPSCounter.IsChecked;
-			Properties.Settings.Default.DisableJump = (bool)DisableJump.IsChecked;
-			Properties.Settings.Default.InvertSprint = (bool)InvertSprint.IsChecked;
-			Properties.Settings.Default.EnableTimer = (bool)EnableTimer.IsChecked;
-			Properties.Settings.Default.SpeedUnit = GetSpeedUnitInt();
-			Properties.Settings.Default.EnableLivesplit = (bool)EnableLivesplit.IsChecked;
-			Properties.Settings.Default.SplitByLevel = (bool)SplitByLevel.IsChecked;
-			Properties.Settings.Default.SplitResetInMenu = (bool)SplitResetInMenu.IsChecked;
-			Properties.Settings.Default.ConfineCursor = (bool)ConfineCursor.IsChecked;
-			Properties.Settings.Default.EnableTimerFix = (bool)EnableTimerFix.IsChecked;
-			Properties.Settings.Default.Save();
+			var field = GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+			
+			if (field != null && field.GetValue(this) is FrameworkElement control)
+			{
+				return control;
+			}
+			return null;
+		}
+
+		void SaveSettings()
+		{
+			var settings = Properties.Settings.Default;
+			var properties = settings.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+			foreach (var property in properties)
+			{
+				var control = FindControlByName(property.Name);
+
+				if (control != null && property.CanWrite)
+				{
+					switch (control)
+					{
+						case CheckBox checkBox:
+							property.SetValue(settings, checkBox.IsChecked);
+							break;
+						case Slider slider:
+							property.SetValue(settings, (int)slider.Value);
+							break;
+						case TextBox textBox:
+							property.SetValue(settings, textBox.Text);
+							break;
+					}
+				}
+			}
+
+			settings.SpeedUnit = GetSpeedUnitInt();
+			settings.Save();
 		}
 
 		void LoadSettings()
 		{
-			FolderPath.Text = Properties.Settings.Default.ClustertruckPath;
-			EnableSpeedometer.IsChecked = Properties.Settings.Default.EnableSpeedometer;
-			EnableTruckColor.IsChecked = Properties.Settings.Default.EnableTruckColor;
-			TruckColor.Text = Properties.Settings.Default.TruckColor;
-			UnlockFPS.IsChecked = Properties.Settings.Default.UnlockFPS;
-			TargetFPS.Value = Properties.Settings.Default.TargetFPS;
-			EnableFPSCounter.IsChecked = Properties.Settings.Default.EnableFPSCounter;
-			DisableJump.IsChecked = Properties.Settings.Default.DisableJump;
-			InvertSprint.IsChecked = Properties.Settings.Default.InvertSprint;
-			EnableTimer.IsChecked = Properties.Settings.Default.EnableTimer;
+			var settings = Properties.Settings.Default;
+			var properties = settings.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+			foreach (var property in properties)
+			{
+				var control = FindControlByName(property.Name);
+
+				if (control != null && property.CanRead)
+				{
+					switch (control)
+					{
+						case CheckBox checkBox:
+							checkBox.IsChecked = (bool)property.GetValue(settings);
+							break;
+						case Slider slider:
+							slider.Value = (int)property.GetValue(settings);
+							break;
+						case TextBox textBox:
+							textBox.Text = (string)property.GetValue(settings);
+							break;
+					}
+				}
+			}
+
 			SetSpeedUnitInt();
-			EnableLivesplit.IsChecked = Properties.Settings.Default.EnableLivesplit;
-			SplitByLevel.IsChecked = Properties.Settings.Default.SplitByLevel;
-			SplitResetInMenu.IsChecked = Properties.Settings.Default.SplitResetInMenu;
-			ConfineCursor.IsChecked = Properties.Settings.Default.ConfineCursor;
-			EnableTimerFix.IsChecked = Properties.Settings.Default.EnableTimerFix;
 		}
 
 		private void PatchButton_Click(object sender, RoutedEventArgs e)
