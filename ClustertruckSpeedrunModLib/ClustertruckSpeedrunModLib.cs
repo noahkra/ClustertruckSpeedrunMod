@@ -142,7 +142,7 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
-		readonly public static string version = "1.1.0";
+		readonly public static string version = "1.2.0";
 
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
@@ -164,6 +164,7 @@ namespace ClustertruckSpeedrunModLib
 		public static bool SplitResetInMenu;
 		public static bool ConfineCursor;
 		public static bool EnableTimerFix;
+		public static bool EnableRandomiser;
 
 		public static void DoPatching(
 			bool _enableSpeedometer, int _speedUnit,
@@ -171,7 +172,7 @@ namespace ClustertruckSpeedrunModLib
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
-			bool _enableTimerFix)
+			bool _enableTimerFix, bool _enableRandomiser)
 		{
 			FPSinterval = 0;
 
@@ -188,6 +189,7 @@ namespace ClustertruckSpeedrunModLib
 			SplitResetInMenu = _splitResetInMenu;
 			ConfineCursor = _confineCursor;
 			EnableTimerFix = _enableTimerFix;
+			EnableRandomiser = _enableRandomiser;
 
 			try
 			{

@@ -214,5 +214,17 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["EnableTimerFix"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableRandomiser {
+            get {
+                return ((bool)(this["EnableRandomiser"]));
+            }
+            set {
+                this["EnableRandomiser"] = value;
+            }
+        }
     }
 }

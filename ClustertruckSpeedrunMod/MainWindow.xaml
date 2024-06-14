@@ -5,44 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClustertruckSpeedrunMod"
         mc:Ignorable="d"
-        Title="Clustertruck Speedrun Mod v1.1.0 PATCHER" Height="450" Width="598" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+        Title="Clustertruck Speedrun Mod v1.2.0 PATCHER" Height="450" Width="598" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
     <Grid Height="434">
         <Grid Margin="10,10,10,399">
             <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Clustertruck Folder:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="115" Height="20"/>
             <TextBox x:Name="FolderPath" TextWrapping="Wrap" Text="Path/To/Clustertruck/Folder" Margin="115,0,75,0" VerticalAlignment="Top" Height="20" IsReadOnly="True"/>
             <Button x:Name="BrowseFolders" Content="Browse" Margin="503,0,0,0" VerticalAlignment="Top" Height="20" Click="BrowseFolders_Click"/>
         </Grid>
-        <StackPanel Margin="10,40,289,30">
-            <CheckBox x:Name="EnableSpeedometer" Checked="EnableSpeedometer_CheckChanged" Unchecked="EnableSpeedometer_CheckChanged" Content="Enable Speedometer (For practice only!)" Height="20" Width="290"/>
-            <Grid Height="20">
-                <RadioButton x:Name="mps" GroupName="SpeedUnit" Content="m/s" HorizontalAlignment="Left" Margin="32,0,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
-                <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" HorizontalAlignment="Left" Margin="76,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
-                <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" HorizontalAlignment="Left" Margin="128,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
-            </Grid>
-            <CheckBox x:Name="EnableTruckColor" Checked="EnableTruckColor_CheckChanged" Unchecked="EnableTruckColor_CheckChanged" Content="Custom Truck Colours:" Height="20" Width="290"/>
-            <TextBox x:Name="TruckColor" TextWrapping="Wrap" Text="#FFFFFF" Width="124" IsEnabled="False" HorizontalAlignment="Left" Margin="30,0,0,10"/>
-            <CheckBox x:Name="UnlockFPS" Checked="UnlockFPS_CheckChanged" Unchecked="UnlockFPS_CheckChanged" Content="Unlock FPS:" Height="20" Width="290"/>
-            <Grid Height="22" HorizontalAlignment="Left">
-                <Slider x:Name="TargetFPS" Width="238" Maximum="240" SmallChange="1" TickFrequency="10" Minimum="90" LargeChange="10" IsEnabled="False" HorizontalAlignment="Left" Margin="30,0,0,0"/>
-                <TextBlock x:Name="TargetFPSValue" TextWrapping="Wrap" Text="240" Margin="273,0,0,0"/>
-            </Grid>
-            <CheckBox x:Name="EnableFPSCounter" Content="Enable FPS Counter" Height="20" Width="290"/>
-            <CheckBox x:Name="DisableJump" Content="Disable Jump (For jumpless categories)" Height="20" Width="290"/>
-            <CheckBox x:Name="InvertSprint" Content="Invert Sprint Button" Height="20" Width="290"/>
-            <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" Height="20" Width="290"/>
-            <CheckBox x:Name="EnableTimerFix" Content="Enable Timer Fix" Height="20" Width="290"/>
-            <CheckBox x:Name="ConfineCursor" Content="Confine Cursor To The Game Window" Height="20" Width="290"/>
-            <CheckBox x:Name="EnableLivesplit" Checked="EnableLivesplit_CheckChanged" Unchecked="EnableLivesplit_CheckChanged" Content="Enable LiveSplit Autosplitter (1.8.29+)" Height="20" Width="290" Margin="0,10,0,0"/>
-            <Grid Height="133" Width="309">
-                <RadioButton x:Name="SplitByWorld" GroupName="SplitBy" Content="Split By World" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
-                <RadioButton x:Name="SplitByLevel" GroupName="SplitBy" Content="Split By Level" HorizontalAlignment="Left" Margin="128,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
-                <CheckBox x:Name="SplitResetInMenu" Content="Reset In Menu" HorizontalAlignment="Left" Margin="31,20,0,0" VerticalAlignment="Top" Height="20" Width="290" IsEnabled="False"/>
-            </Grid>
-        </StackPanel>
-        <Button x:Name="PatchButton" Content="Apply Patches" VerticalAlignment="Top" Click="PatchButton_Click" Height="270" Margin="324,40,10,0"/>
-        <Button x:Name="UnpatchButton" Content="Remove All Patches" VerticalAlignment="Top" Height="79" Margin="324,315,10,0" Click="UnpatchButton_Click"/>
-        <ProgressBar x:Name="ProgressVal" HorizontalAlignment="Left" Height="25" Margin="324,399,0,0" VerticalAlignment="Top" Width="274" Value="0"/>
-        <TextBlock x:Name="ProgressText" TextWrapping="Wrap" Text="" Margin="324,399,10,10" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TabControl x:Name="tabControl" Margin="10,40,270,124" Width="318">
+            <TabItem Header="Essentials">
+                <StackPanel Height="224" Margin="10,10,10,10" Width="290" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <CheckBox x:Name="UnlockFPS" Checked="UnlockFPS_CheckChanged" Unchecked="UnlockFPS_CheckChanged" Content="Unlock FPS" Tag="Unlock the game's FPS when V-Sync is turned off. From 90 (default) to 240 (maximum allowed by leaderboards)." MouseEnter="DisplayDetails" Height="20"/>
+                    <StackPanel Height="22" Orientation="Horizontal" Width="NaN">
+                        <Slider x:Name="TargetFPS" Width="200" Maximum="240" SmallChange="1" TickFrequency="10" Minimum="90" LargeChange="10" IsEnabled="False" Margin="20,0,0,0"/>
+                        <TextBlock x:Name="TargetFPSValue" TextWrapping="Wrap" Text="240" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <CheckBox x:Name="EnableFPSCounter" Content="Enable FPS Counter" Tag="Enable the in-game FPS counter, which shows your current FPS." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="ConfineCursor" Content="Confine Cursor To The Game Window" Tag="Confine the cursor to the game window during gameplay. When enabled this prevents the cursor from leaving the game window while you are not in the main menu. No more clicking out of the game when you die!" MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="InvertSprint" Content="Invert Sprint Button" Tag="Invert the sprint button, such that it is no longer necessary to hold it down to sprint. When enabled this effectively turns it into a walk button, because you stop sprinting while pressing it." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableTimerFix" Content="Enable Timer Fix" Tag="Fix the in-game timer's accuracy and precision. When enabled your timer will be within ~0.01s of what your LiveSplit reports for your times." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" Tag="Turn on the timer by default so you don't have to press 'T' to enable it every time." MouseEnter="DisplayDetails" Height="20"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Gameplay">
+                <StackPanel Height="224" Margin="10,10,10,10" Width="290" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <CheckBox x:Name="EnableRandomiser" Content="Enable RANDOMISER" Tag="Enable the RANDOMISER gamemode. This overhauls the entire game to have you completely all 90 levels in a random order, ending with 9:10. For every level you get given random abilities to complete it." MouseEnter="DisplayDetails" Height="20" FontWeight="Bold"/>
+                    <CheckBox x:Name="DisableJump" Content="Disable Jump" Tag="Disable the jump button for jumpless speedrun categories." MouseEnter="DisplayDetails" Height="20"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="LiveSplit">
+                <StackPanel Height="224" Margin="10,10,10,10" Width="290" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <CheckBox x:Name="EnableLivesplit" Content="Enable LiveSplit Autosplitter (1.8.29+)" Tag="Enable the LiveSplit Autosplitter, with IGT support. You must use LiveSplit 1.8.29 or newer. Make sure other autosplitters are disabled." MouseEnter="DisplayDetails" Checked="EnableLivesplit_CheckChanged" Unchecked="EnableLivesplit_CheckChanged" Height="20" Width="290"/>
+                    <StackPanel Margin="20,0,0,0">
+                        <StackPanel Orientation="Horizontal" Height="16">
+                            <RadioButton x:Name="SplitByWorld" GroupName="SplitBy" Content="Split By World" Tag="Split every time you complete a world. IGT time still pauses in level complete screens." MouseEnter="DisplayDetails" IsChecked="True" IsEnabled="False"/>
+                            <RadioButton x:Name="SplitByLevel" GroupName="SplitBy" Content="Split By Level" Tag="Split every time you complete a level." MouseEnter="DisplayDetails" IsEnabled="False" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <CheckBox x:Name="SplitResetInMenu" Content="Reset In Menu" Tag="Reset LiveSplit when leaving to the Level Select screen. Useful for quickly resetting a run." MouseEnter="DisplayDetails" Height="20" Width="290" IsEnabled="False" Padding="6,-1,0,0" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Miscellaneous">
+                <StackPanel Height="224" Margin="10,10,10,10" HorizontalAlignment="Center" VerticalAlignment="Center" Width="290">
+                    <CheckBox x:Name="EnableTruckColor" Content="Custom Truck Colours:" Tag="Enable custom truck colours." MouseEnter="DisplayDetails" Checked="EnableTruckColor_CheckChanged" Unchecked="EnableTruckColor_CheckChanged" Height="20"/>
+                    <TextBox x:Name="TruckColor" Text="#FFFFFF" Tag="Enter the HTML HEX code for the colour you want your trucks to be." MouseEnter="DisplayDetails" TextWrapping="Wrap" Width="124" IsEnabled="False" HorizontalAlignment="Left" Margin="20,0,0,5"/>
+                    <CheckBox x:Name="EnableSpeedometer" Content="Enable Speedometer (For practice only!)" Tag="Enable the speedometer, showing the current player speed. THE SPEEDOMETER IS NOT ALLOWED TO BE ENABLED WHEN SUBMITTING A SPEEDRUN TO THE LEADERBOARDS! Configurable in m/s, km/h, or mph." MouseEnter="DisplayDetails" Checked="EnableSpeedometer_CheckChanged" Unchecked="EnableSpeedometer_CheckChanged" Height="20" Width="290"/>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton x:Name="mps" GroupName="SpeedUnit" Content="m/s" Tag="Configure the speedometer to show speed in m/s.&#x0a;(1u/s = 1m/s)" MouseEnter="DisplayDetails" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False" Width="NaN"/>
+                        <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" Tag="Configure the speedometer to show speed in km/h.&#x0a;(1u/s = 3,6km/h)" MouseEnter="DisplayDetails" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+                        <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" Tag="Configure the speedometer to show speed in mph.&#x0a;(1u/s = 2,2369mph)" MouseEnter="DisplayDetails" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <Button x:Name="PatchButton" Content="Apply Patches" VerticalAlignment="Top" Click="PatchButton_Click" Height="270" Margin="333,40,10,0"/>
+        <Button x:Name="UnpatchButton" Content="Remove All Patches" VerticalAlignment="Top" Height="79" Margin="333,315,10,0" Click="UnpatchButton_Click"/>
+        <ProgressBar x:Name="ProgressVal" Height="25" Margin="333,399,10,10" Value="0"/>
+        <TextBlock x:Name="ProgressText" TextWrapping="Wrap" Text="" Margin="333,399,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Width="255" TextAlignment="Center" Height="25">
             <UIElement.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -53,5 +73,7 @@
             </UIElement.RenderTransform>
         </TextBlock>
         <Label x:Name="label" Content="Made with ❤️ by Noah :)" HorizontalAlignment="Left" Margin="0,408,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="Details" HorizontalAlignment="Left" Margin="10,315,0,0" TextWrapping="Wrap" Text="Hover over any patches to view more details!" VerticalAlignment="Top" Height="88" Width="318" Foreground="Black" Background="#FFDDDDDD" Padding="10,10,10,10"/>
+
     </Grid>
 </Window>

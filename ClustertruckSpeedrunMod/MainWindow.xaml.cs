@@ -20,34 +20,70 @@ namespace ClustertruckSpeedrunMod
 
 			TargetFPS.ValueChanged += TargetFPS_ValueChanged;
 
-			Loaded += (sender, e) => SetupProgressReset(this);
+			Loaded += (sender, e) => SetupControlEvents(this);
 
 			LoadSettings();
 
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
 		}
 
-		private void SetupProgressReset(DependencyObject container)
+		private void SetupControlEvents(DependencyObject container)
 		{
+			if (container == null) return;
+
 			int count = VisualTreeHelper.GetChildrenCount(container);
 
 			for (int i = 0; i < count; i++)
 			{
 				var childNode = VisualTreeHelper.GetChild(container, i);
 
-				if (childNode is CheckBox checkBox)
+				switch (childNode)
 				{
-					checkBox.Checked += (sender, e) => Progress(0, "");
-					checkBox.Unchecked += (sender, e) => Progress(0, "");
+					case CheckBox checkBox:
+						checkBox.Checked += (sender, e) => Progress(0, "");
+						checkBox.Unchecked += (sender, e) => Progress(0, "");
+						checkBox.MouseLeave += (sender, e) => { Details.Text = "Hover over any patches to view more details!"; };
+						break;
+					case RadioButton radioButton:
+						radioButton.Checked += (sender, e) => Progress(0, "");
+						radioButton.Unchecked += (sender, e) => Progress(0, "");
+						radioButton.MouseLeave += (sender, e) => { Details.Text = "Hover over any patches to view more details!"; };
+						break;
+					default:
+						SetupControlEvents(childNode);
+						break;
 				}
 
-				if (childNode is RadioButton radioButton)
+				if (childNode is ContentControl contentControl)
 				{
-					radioButton.Checked += (sender, e) => Progress(0, "");
-					radioButton.Unchecked += (sender, e) => Progress(0, "");
+					SetupControlEvents(contentControl.Content as DependencyObject);
+				} 
+				else if (childNode is ItemsControl itemsControl)
+				{
+					foreach (var item in itemsControl.Items)
+					{
+						if (item is DependencyObject dependencyObjectItem)
+						{
+							SetupControlEvents(dependencyObjectItem);
+						}
+					}
 				}
+			}
+		}
 
-				SetupProgressReset(childNode);
+		void DisplayDetails(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			switch (sender)
+			{
+				case CheckBox checkBox:
+					Details.Text = checkBox.Tag.ToString();
+					break;
+				case RadioButton radioButton:
+					Details.Text = radioButton.Tag.ToString();
+					break;
+				case Slider slider:
+					Details.Text = slider.Value.ToString();
+					break;
 			}
 		}
 
@@ -270,6 +306,7 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitResetInMenu.IsChecked))); // SplitResetInMenu
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(ConfineCursor.IsChecked))); // ConfineCursor
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTimerFix.IsChecked))); // EnableTimerFix
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableRandomiser.IsChecked))); // EnableRandomiser
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Call, mainModule.ImportReference(patchMethod)));
 
