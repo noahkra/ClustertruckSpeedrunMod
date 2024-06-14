@@ -3,6 +3,8 @@ using System.IO;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ClustertruckSpeedrunMod
 {
@@ -17,37 +19,35 @@ namespace ClustertruckSpeedrunMod
 
 			TargetFPS.ValueChanged += TargetFPS_ValueChanged;
 
-			SetupProgressReset();
+			Loaded += (sender, e) => SetupProgressReset(this);
 
 			LoadSettings();
 
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
 		}
 
-		private void SetupProgressReset()
+		private void SetupProgressReset(DependencyObject container)
 		{
-			EnableFPSCounter.Checked += ResetProgress;
-			EnableFPSCounter.Unchecked += ResetProgress;
-			DisableJump.Checked += ResetProgress;
-			DisableJump.Unchecked += ResetProgress;
-			InvertSprint.Checked += ResetProgress;
-			InvertSprint.Unchecked += ResetProgress;
-			EnableTimer.Checked += ResetProgress;
-			EnableTimer.Unchecked += ResetProgress;
-			mps.Checked += ResetProgress;
-			mps.Unchecked += ResetProgress;
-			kmph.Checked += ResetProgress;
-			kmph.Unchecked += ResetProgress;
-			mph.Checked += ResetProgress;
-			mph.Unchecked += ResetProgress;
-			SplitByLevel.Checked += ResetProgress;
-			SplitByLevel.Unchecked += ResetProgress;
-			SplitResetInMenu.Checked += ResetProgress;
-			SplitResetInMenu.Unchecked += ResetProgress;
-			ConfineCursor.Checked += ResetProgress;
-			ConfineCursor.Unchecked += ResetProgress;
-			EnableTimerFix.Checked += ResetProgress;
-			EnableTimerFix.Unchecked += ResetProgress;
+			int count = VisualTreeHelper.GetChildrenCount(container);
+
+			for (int i = 0; i < count; i++)
+			{
+				var childNode = VisualTreeHelper.GetChild(container, i);
+
+				if (childNode is CheckBox checkBox)
+				{
+					checkBox.Checked += (sender, e) => Progress(0, "");
+					checkBox.Unchecked += (sender, e) => Progress(0, "");
+				}
+
+				if (childNode is RadioButton radioButton)
+				{
+					radioButton.Checked += (sender, e) => Progress(0, "");
+					radioButton.Unchecked += (sender, e) => Progress(0, "");
+				}
+
+				SetupProgressReset(childNode);
+			}
 		}
 
 		private void EnableLivesplit_Unchecked(object sender, RoutedEventArgs e)
@@ -55,7 +55,6 @@ namespace ClustertruckSpeedrunMod
 			SplitByLevel.IsEnabled = false;
 			SplitByWorld.IsEnabled = false;
 			SplitResetInMenu.IsEnabled = false;
-			Progress(0, "");
 		}
 
 		private void EnableLivesplit_Checked(object sender, RoutedEventArgs e)
@@ -63,18 +62,15 @@ namespace ClustertruckSpeedrunMod
 			SplitByLevel.IsEnabled = true;
 			SplitByWorld.IsEnabled = true;
 			SplitResetInMenu.IsEnabled = true;
-			Progress(0, "");
 		}
 		private void EnableTruckColor_Checked(object sender, RoutedEventArgs e)
 		{
 			TruckColor.IsEnabled = true;
-			Progress(0, "");
 		}
 
 		private void EnableTruckColor_Unchecked(object sender, RoutedEventArgs e)
 		{
 			TruckColor.IsEnabled = false;
-			Progress(0, "");
 		}
 
 		private void EnableSpeedometer_Checked(object sender, RoutedEventArgs e)
@@ -82,7 +78,6 @@ namespace ClustertruckSpeedrunMod
 			mps.IsEnabled = true;
 			kmph.IsEnabled = true;
 			mph.IsEnabled = true;
-			Progress(0, "");
 		}
 
 		private void EnableSpeedometer_Unchecked(object sender, RoutedEventArgs e)
@@ -90,19 +85,16 @@ namespace ClustertruckSpeedrunMod
 			mps.IsEnabled = false;
 			kmph.IsEnabled = false;
 			mph.IsEnabled = false;
-			Progress(0, "");
 		}
 
 		private void UnlockFPS_Checked(object sender, RoutedEventArgs e)
 		{
 			TargetFPS.IsEnabled = true;
-			Progress(0, "");
 		}
 
 		private void UnlockFPS_Unchecked(object sender, RoutedEventArgs e)
 		{
 			TargetFPS.IsEnabled = false;
-			Progress(0, "");
 		}
 
 		private void TargetFPS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -110,12 +102,6 @@ namespace ClustertruckSpeedrunMod
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
 			Progress(0, "");
 		}
-
-		private void ResetProgress(object sender, RoutedEventArgs e)
-		{
-			Progress(0, "");
-		}
-
 
 		int GetSpeedUnitInt()
 		{
