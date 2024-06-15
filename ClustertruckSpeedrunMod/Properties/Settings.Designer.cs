@@ -226,5 +226,29 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["EnableRandomiser"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableTruckCannon {
+            get {
+                return ((bool)(this["EnableTruckCannon"]));
+            }
+            set {
+                this["EnableTruckCannon"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableSurfingShoes {
+            get {
+                return ((bool)(this["EnableSurfingShoes"]));
+            }
+            set {
+                this["EnableSurfingShoes"] = value;
+            }
+        }
     }
 }

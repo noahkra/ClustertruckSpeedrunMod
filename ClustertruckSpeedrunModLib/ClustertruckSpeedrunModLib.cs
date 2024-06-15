@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Collections.Generic;
+using Random = System.Random;
 using System.Reflection.Emit;
-using HarmonyLib;
-using UnityEngine;
-using UnityEngine.UI;
-using System.IO.Pipes;
-using System.IO;
 using System.Diagnostics;
+using System.Reflection;
+using System.IO.Pipes;
+using UnityEngine.UI;
+using UnityEngine;
+using System.Linq;
+using HarmonyLib;
+using System.IO;
+using System;
 
 namespace ClustertruckSpeedrunModLib
 {
@@ -140,6 +141,55 @@ namespace ClustertruckSpeedrunModLib
 		}
 	}
 
+	public static class Randomiser
+	{
+		readonly static List<int> AllLevels = Enumerable.Range(1, 89).ToList(); // Excluding boss, since it's always last
+		readonly static List<string> MovementAbilities = new List<string> { "None", "Double Jump", "Air Dash", "Jetpack", "Levitation", "Grappling Hook", "Truck Boost", "Disrespected Blink", "Trucker Flip", "Surfing shoes" };
+		static Random MovementRandom;
+		readonly static List<string> UtilityAbilities = new List<string> { "None", "Time slow", "Portable Truck", "back truck", "trucksolute zero", "Epic mode", "Supertruck" /* super. TRUCK. SUPER. T R U C K. */, "Truck cannon" };
+		static Random UtilityRandom;
+
+		public static List<int> RandomisedLevels;
+		public static int currentLevel;
+		public static int seed;
+			
+		static void LevelRandomiser<T>(List<T> list, int seed)
+		{
+			Random rng = new Random(seed);
+			int n = list.Count;
+			while (n > 1)
+			{
+				n--;
+				int k = rng.Next(n + 1);
+				T value = list[k];
+				list[k] = list[n];
+				list[n] = value;
+			}
+		}
+
+		public static void Randomise()
+		{
+			currentLevel = -1;
+			RandomisedLevels = AllLevels;
+			seed = (int)DateTime.Now.Ticks;
+			MovementRandom = new Random(seed);
+			UtilityRandom = new Random(seed);
+			LevelRandomiser(RandomisedLevels, seed);
+			RandomisedLevels.Add(90); // Add boss
+			Console.WriteLine($"[SPEEDRUNMOD] Randomiser levels: {string.Join(",", RandomisedLevels.Select(n => n.ToString()).ToArray())}\nseed:{DateTime.Now.Ticks}aaa{(int)DateTime.Now.Ticks}");
+		}
+
+		public static int NextLevel()
+		{
+			info.utilityName = "freeze";//UtilityRandom.Next(0, 7);
+			info.abilityName = "surfing shoes";//MovementRandom.Next(0, 9);
+			AbilitySelector abilitySelector = new AbilitySelector();
+			abilitySelector.SelectAbility(); //lmfao
+			currentLevel++;
+			return RandomisedLevels[currentLevel];
+		}
+	}
+
 	public static class Patcher
 	{
 		readonly public static string version = "1.2.0";
@@ -165,6 +215,8 @@ namespace ClustertruckSpeedrunModLib
 		public static bool ConfineCursor;
 		public static bool EnableTimerFix;
 		public static bool EnableRandomiser;
+		public static bool EnableTruckCannon;
+		public static bool EnableSurfingShoes;
 
 		public static void DoPatching(
 			bool _enableSpeedometer, int _speedUnit,
@@ -172,7 +224,7 @@ namespace ClustertruckSpeedrunModLib
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
-			bool _enableTimerFix, bool _enableRandomiser)
+			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, bool _enableSurfingShoes)
 		{
 			FPSinterval = 0;
 
@@ -190,14 +242,22 @@ namespace ClustertruckSpeedrunModLib
 			ConfineCursor = _confineCursor;
 			EnableTimerFix = _enableTimerFix;
 			EnableRandomiser = _enableRandomiser;
+			EnableTruckCannon = _enableTruckCannon;
+			EnableSurfingShoes = _enableSurfingShoes;
 
 			try
 			{
 				var harmony = new Harmony("com.clustertruckspeedrun.mod");
-
+				
 #if DEBUG
 				Harmony.DEBUG = true;
 #endif
+
+				if (EnableRandomiser)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying RandomiserPatch...");
+					RandomiserPatch.Apply(harmony);
+				}
 
 				if (EnableLivesplit)
 				{
@@ -248,11 +308,84 @@ namespace ClustertruckSpeedrunModLib
 					ConfineCursorPatch.Apply(harmony);
 				}
 
+				if (EnableSurfingShoes || EnableTruckCannon)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying HiddenAbilityPatch...");
+					HiddenAbilityPatch.Apply(harmony);
+				}
+
 				Console.WriteLine("[SPEEDRUNMOD] All patches applied successfully!");
 			} catch (Exception ex)
 			{
 				Console.WriteLine($"[SPEEDRUNMOD] Patching Failed: {ex}");
 			}
+		}
+	}
+
+	static class HiddenAbilityPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var original = typeof(AbilitySelector).GetMethod(nameof(AbilitySelector.SelectAbility));
+
+			var patch = typeof(HiddenAbilityPatch).GetMethod(nameof(Postfix));
+
+			harmony.Patch(original, postfix: new HarmonyMethod(patch));
+		}
+
+		public static void Postfix(AbilitySelector __instance)
+		{
+			if (Patcher.EnableSurfingShoes)
+			{ 
+				__instance.movementManager.myAbility = __instance.a_powerLegs;
+				__instance.movementManager.Activate();
+			}
+			if (Patcher.EnableTruckCannon)
+			{
+				__instance.utilityManager.myAbility = __instance.truckCannon;
+				__instance.utilityManager.Activate();
+			}
+		}
+	}
+
+	static class RandomiserPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var nextLevelOriginal = typeof(Manager).GetMethod(nameof(Manager.NextLevel));
+			var playButtonOriginal = typeof(menuBar).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var nextLevelPatch = typeof(RandomiserPatch).GetMethod(nameof(Prefix));
+			var playButtonPatch = typeof(RandomiserPatch).GetMethod(nameof(Postfix));
+
+			harmony.Patch(nextLevelOriginal, prefix: new HarmonyMethod(nextLevelPatch));
+			harmony.Patch(playButtonOriginal, postfix: new HarmonyMethod(playButtonPatch));
+		}
+		public static void Prefix()
+		{
+			info.currentLevel = Randomiser.NextLevel() - 1;
+		}
+
+		public static void Postfix(menuBar __instance)
+		{
+			Transform parent = __instance.leftMask.Find("Main");
+			Transform playButton = parent.Find("play");
+			Text playButtonText = playButton.Find("Text").GetComponent<Text>();
+
+			playButtonText.text = "PLAY\nRANDOMISER";
+			playButtonText.transform.parent.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(480f, 150f);
+
+			parent.Find("abilities").gameObject.SetActive(false);
+
+			playButton.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
+			playButton.gameObject.GetComponent<Button>().onClick.AddListener(PlayButton_OnClick);
+		}
+
+		static void PlayButton_OnClick()
+		{
+			Randomiser.Randomise();
+			info.currentLevel = Randomiser.NextLevel();
+			Manager.Instance().Play();
 		}
 	}
 
@@ -394,7 +527,7 @@ namespace ClustertruckSpeedrunModLib
 		public static void Postfix(menuBar __instance)
 		{
 			Transform parent = __instance.leftMask.Find("Main"); 
-			Text playButtonText = __instance.leftMask.Find("Main").Find("play").Find("Text").GetComponent<Text>();
+			Text playButtonText = parent.Find("play").Find("Text").GetComponent<Text>();
 			GameObject title = new GameObject("SpeedrunmodTitle");
 			Text titleText = title.AddComponent<Text>();
 			titleText.text = $"Clustertruck Speedrun Mod v{Patcher.version}";
@@ -487,7 +620,7 @@ namespace ClustertruckSpeedrunModLib
 			}
 			
 			____NameText.text = String.Empty;
-			____TimeText.text = $"{ (Patcher.DisableJump ? "Jumpless\n\n" : "") }{ (Patcher.EnableSpeedometer ? $"{velocity}\n\n" : "") }{ (Patcher.EnableFPSCounter ? $"{Patcher.prevFPS}fps\n" : "") }{ val }";
+			____TimeText.text = $"{ (Patcher.EnableRandomiser ? $"Randomiser\n{Randomiser.seed}\n{Randomiser.currentLevel + 1}/90\n\n" : "") }{ (Patcher.DisableJump ? "Jumpless\n\n" : "") }{ (Patcher.EnableSpeedometer ? $"{velocity}\n\n" : "") }{ (Patcher.EnableFPSCounter ? $"{Patcher.prevFPS}fps\n" : "") }{ val }";
 		}
 	}
 

@@ -31,6 +31,8 @@
                 <StackPanel Height="224" Margin="10,10,10,10" Width="290" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <CheckBox x:Name="EnableRandomiser" Content="Enable RANDOMISER" Tag="Enable the RANDOMISER gamemode. This overhauls the entire game to have you completely all 90 levels in a random order, ending with 9:10. For every level you get given random abilities to complete it." MouseEnter="DisplayDetails" Height="20" FontWeight="Bold"/>
                     <CheckBox x:Name="DisableJump" Content="Disable Jump" Tag="Disable the jump button for jumpless speedrun categories." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableTruckCannon" Content="Enable Truck Cannon Ability" Tag="Enable the hidden ability Truck Cannon. Use RMB to fire a truck. This overrides your utility ability to be set to Truck Cannon, otherwise it doesn't work." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableSurfingShoes" Content="Enable Surfing Shoes Ability" Tag="Enable the hidden ability Surfing Shoes. This is a passive ability that gives you a movement boost. This overrides your movement ability to be set to Surfing Shoes, otherwise it doesn't work." MouseEnter="DisplayDetails" Height="20"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="LiveSplit">
