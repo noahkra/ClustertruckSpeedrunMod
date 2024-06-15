@@ -328,9 +328,12 @@ namespace ClustertruckSpeedrunModLib
 			harmony.Patch(original, prefix: new HarmonyMethod(patch));
 		}
 
-		public static void Prefix(player __instance)
+		public static void Prefix()
 		{
-			Cursor.lockState = CursorLockMode.Confined;
+			if (Cursor.lockState == CursorLockMode.None)
+			{
+				Cursor.lockState = CursorLockMode.Confined;
+			}
 		}
 	}
 
