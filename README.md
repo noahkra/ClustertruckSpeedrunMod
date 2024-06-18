@@ -17,26 +17,38 @@ If you have any feature requests or want to report a bug, make sure to submit an
 ***
 
 # Features
-- Enable Speedometer
-	- Configurable to show speed in m/s, km/h or mph.
-- Custom Truck Colours
+
+## Essentials
 - Unlock FPS
 	- Up to 240fps, which is the maximum allowed by the SRC leaderboards.
 - Enable FPS counter
+- Confine cursor to the game window
+- Invert Sprint Button
+- Fix in-game timer accuracy
+- Enable Timer By Default
+
+## Gameplay
+- Randomiser
+	- Play through all 90 levels in a random order with random abilities, ending in 9:10.
 - Disable jump 
 	- For jumpless categories.
-- Invert Sprint Button
-- Enable Timer By Default
-- Fix in-game timer accuracy
-- Confine cursor to the game window
+- Two new abilities that were hidden in the game's code
+	- Truck cannon: Press RMB to fire a truck.
+	- Surfing shoes: Give a passive boost to movement.
+
+## LiveSplit
 - Enable LiveSplit Auto splitter
 	- Split By World / Split By Level
 	- Reset In Menu
 
+## Miscellaneous
+- Enable Speedometer
+	- Configurable to show speed in m/s, km/h or mph.
+- Custom Truck Colours
+
 ### Features wishlist:
 - Airtime timer (for flying% category)
 - Low grav patch (for LowGrav category)
-- Randomiser (Levels & abilities)
 - Multiplayer
 - Preload 9:10
 
