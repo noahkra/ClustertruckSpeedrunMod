@@ -456,7 +456,8 @@ namespace ClustertruckSpeedrunModLib
 		{
 			if (__instance.framesSinceStart == 0)
 			{
-				if (info.currentLevel % 10 == 1)
+				if ((!Patcher.EnableRandomiser && info.currentLevel % 10 == 1) || 
+					(Patcher.EnableRandomiser && Randomiser.currentLevel == 0))
 				{
 					if (Autosplitter.GetSplitIndex() == -1) // If splitter not running
 					{
