@@ -203,7 +203,7 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
-		readonly public static string version = "1.2.0";
+		readonly public static string version = "1.2.1";
 
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
@@ -429,6 +429,7 @@ namespace ClustertruckSpeedrunModLib
 			var pauseSplitOriginal = typeof(steam_WorkshopHandler).GetMethod(nameof(steam_WorkshopHandler.UploadScoreToLeaderBoard));
 			var unpauseStartOriginal = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
 			var menuResetOriginal = typeof(Manager).GetMethod(nameof(Manager.ActuallyGoToLevelSelect));
+			var menuReset2Original = typeof(Manager).GetMethod(nameof(Manager.OpenMainMenuFromGame));
 
 			var pauseSplitPatch = typeof(LivesplitPatch).GetMethod(nameof(PauseSplitPostfix));
 			var unpauseStartPatch = typeof(LivesplitPatch).GetMethod(nameof(unpauseStartPrefix));
@@ -437,6 +438,7 @@ namespace ClustertruckSpeedrunModLib
 			harmony.Patch(pauseSplitOriginal, postfix: new HarmonyMethod(pauseSplitPatch));
 			harmony.Patch(unpauseStartOriginal, prefix: new HarmonyMethod(unpauseStartPatch));
 			harmony.Patch(menuResetOriginal, postfix: new HarmonyMethod(menuResetPatch));
+			harmony.Patch(menuReset2Original, postfix: new HarmonyMethod(menuResetPatch));
 		}
 
 		public static void PauseSplitPostfix()
