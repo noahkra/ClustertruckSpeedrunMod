@@ -178,6 +178,9 @@ namespace ClustertruckSpeedrunMod
 						case TextBox textBox:
 							property.SetValue(settings, textBox.Text);
 							break;
+						case RadioButton radioButton:
+							property.SetValue(settings, radioButton.IsChecked);
+							break;
 					}
 				}
 			}
@@ -207,6 +210,9 @@ namespace ClustertruckSpeedrunMod
 							break;
 						case TextBox textBox:
 							textBox.Text = (string)property.GetValue(settings);
+							break;
+						case RadioButton radioButton:
+							radioButton.IsChecked = (bool)property.GetValue(settings);
 							break;
 					}
 				}
