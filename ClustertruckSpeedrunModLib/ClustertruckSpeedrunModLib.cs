@@ -192,7 +192,7 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
-		readonly public static string version = "1.2.1";
+		readonly public static string version = "1.2.2";
 
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
