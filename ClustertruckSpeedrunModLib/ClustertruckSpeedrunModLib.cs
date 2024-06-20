@@ -180,21 +180,10 @@ namespace ClustertruckSpeedrunModLib
 			Console.WriteLine($"[SPEEDRUNMOD] Randomiser levels: {string.Join(",", RandomisedLevels.Select(n => n.ToString()).ToArray())}\nseed:{DateTime.Now.Ticks}/{(int)DateTime.Now.Ticks}");
 		}
 
-		static bool IsBannedTruckflipLevel()
-		{
-			int level = RandomisedLevels[currentLevel];
-			if (level == 35 || level == 76 || level == 80 || level == 90)
-			{
-				return true;
-			}
-
-			return false;
-		}
-
 		public static int NextLevel()
 		{
 			currentLevel++;
-			info.abilityName = MovementAbilities[IsBannedTruckflipLevel() ? AbilityRandom.Next(0, MovementAbilities.Count - 1) : AbilityRandom.Next(0, MovementAbilities.Count)];
+			info.abilityName = MovementAbilities[AbilityRandom.Next(0, MovementAbilities.Count)];
 			info.utilityName = UtilityAbilities[AbilityRandom.Next(0, UtilityAbilities.Count)];
 			Console.WriteLine($"[SPEEDRUNMOD] Randomiser level {currentLevel}: {RandomisedLevels[currentLevel]}. Abilities: {info.abilityName}/{info.utilityName}");
 			return RandomisedLevels[currentLevel];
