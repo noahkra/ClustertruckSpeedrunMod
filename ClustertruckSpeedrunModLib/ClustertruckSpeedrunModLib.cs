@@ -192,6 +192,7 @@ namespace ClustertruckSpeedrunModLib
 
 	public static class Patcher
 	{
+		public static bool Patched = false;
 		readonly public static string version = "1.2.2";
 
 		public static Rigidbody playRig = null;
@@ -239,6 +240,8 @@ namespace ClustertruckSpeedrunModLib
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
 			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, bool _enableSurfingShoes)
 		{
+			if (Patched) { return; } // Don't patch again, just incase...
+
 			FPSinterval = 0;
 
 			EnableSpeedometer = _enableSpeedometer;
@@ -293,6 +296,9 @@ namespace ClustertruckSpeedrunModLib
 				Console.WriteLine("[SPEEDRUNMOD] Applying FPSPatch...");
 				FPSPatch.Apply(harmony);
 
+				Console.WriteLine("[SPEEDRUNMOD] Applying NextLevelButtonPatch");
+				NextLevelButtonPatch.Apply(harmony);
+
 				if (DisableJump)
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying JumplessPatch...");
@@ -328,86 +334,11 @@ namespace ClustertruckSpeedrunModLib
 				}
 
 				Console.WriteLine("[SPEEDRUNMOD] All patches applied successfully!");
+				Patched = true;
 			} catch (Exception ex)
 			{
 				Console.WriteLine($"[SPEEDRUNMOD] Patching Failed: {ex}");
 			}
-		}
-	}
-
-	static class HiddenAbilityPatch
-	{
-		public static void Apply(Harmony harmony)
-		{
-			var original = typeof(AbilitySelector).GetMethod(nameof(AbilitySelector.SelectAbility));
-
-			var patch = typeof(HiddenAbilityPatch).GetMethod(nameof(Postfix));
-
-			harmony.Patch(original, postfix: new HarmonyMethod(patch));
-		}
-
-		public static void Postfix(AbilitySelector __instance)
-		{
-			if (Patcher.EnableSurfingShoes)
-			{ 
-				__instance.movementManager.myAbility = __instance.a_powerLegs;
-				__instance.movementManager.Activate();
-			}
-			if (Patcher.EnableTruckCannon)
-			{
-				__instance.utilityManager.myAbility = __instance.truckCannon;
-				__instance.utilityManager.Activate();
-			}
-		}
-	}
-
-	static class RandomiserPatch
-	{
-		public static void Apply(Harmony harmony)
-		{
-			var nextLevelOriginal = typeof(Manager).GetMethod(nameof(Manager.NextLevel));
-			var playButtonOriginal = typeof(menuBar).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
-			var levelSelectOriginal = typeof(pauseScreen).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
-
-			var nextLevelPatch = typeof(RandomiserPatch).GetMethod(nameof(NextLevelPrefix));
-			var playButtonPatch = typeof(RandomiserPatch).GetMethod(nameof(PlaybuttonPostfix));
-			var levelSelectPatch = typeof(RandomiserPatch).GetMethod(nameof(LevelSelectPostfix));
-
-			harmony.Patch(nextLevelOriginal, prefix: new HarmonyMethod(nextLevelPatch));
-			harmony.Patch(playButtonOriginal, postfix: new HarmonyMethod(playButtonPatch));
-			harmony.Patch(levelSelectOriginal, postfix: new HarmonyMethod(levelSelectPatch));
-		}
-		public static void NextLevelPrefix()
-		{
-			info.currentLevel = Randomiser.NextLevel() - 1;
-		}
-
-		public static void PlaybuttonPostfix(menuBar __instance)
-		{
-			Transform parent = __instance.leftMask.Find("Main");
-			Transform playButton = parent.Find("play");
-			Text playButtonText = playButton.Find("Text").GetComponent<Text>();
-
-			playButtonText.text = "PLAY\nRANDOMISER";
-			playButtonText.transform.parent.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(480f, 150f);
-
-			parent.Find("abilities").gameObject.SetActive(false);
-
-			playButton.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
-			playButton.gameObject.GetComponent<Button>().onClick.AddListener(PlayButton_OnClick);
-		}
-
-		static void PlayButton_OnClick()
-		{
-			Randomiser.Randomise();
-			info.currentLevel = Randomiser.NextLevel();
-			Manager.Instance().Play();
-		}
-
-		public static void LevelSelectPostfix(GameObject ___pauseMenu)
-		{
-			___pauseMenu.transform.Find("levels").gameObject.SetActive(false); // remove the level select button
-			___pauseMenu.transform.Find("GhostHandler_Pause").gameObject.SetActive(false); // remove ghosts because they for sure mess with the randomiser in ways I don't want to deal with
 		}
 	}
 
@@ -475,6 +406,82 @@ namespace ClustertruckSpeedrunModLib
 		}
 	}
 	
+	static class RandomiserPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var nextLevelOriginal = typeof(Manager).GetMethod(nameof(Manager.NextLevel));
+			var playButtonOriginal = typeof(menuBar).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+			var levelSelectOriginal = typeof(pauseScreen).GetMethod("Start", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var nextLevelPatch = typeof(RandomiserPatch).GetMethod(nameof(NextLevelPrefix));
+			var playButtonPatch = typeof(RandomiserPatch).GetMethod(nameof(PlaybuttonPostfix));
+			var levelSelectPatch = typeof(RandomiserPatch).GetMethod(nameof(LevelSelectPostfix));
+
+			harmony.Patch(nextLevelOriginal, prefix: new HarmonyMethod(nextLevelPatch));
+			harmony.Patch(playButtonOriginal, postfix: new HarmonyMethod(playButtonPatch));
+			harmony.Patch(levelSelectOriginal, postfix: new HarmonyMethod(levelSelectPatch));
+		}
+		public static void NextLevelPrefix()
+		{
+			info.currentLevel = Randomiser.NextLevel() - 1;
+		}
+
+		public static void PlaybuttonPostfix(menuBar __instance)
+		{
+			Transform parent = __instance.leftMask.Find("Main");
+			Transform playButton = parent.Find("play");
+			Text playButtonText = playButton.Find("Text").GetComponent<Text>();
+
+			playButtonText.text = "PLAY\nRANDOMISER";
+			playButtonText.transform.parent.transform.GetComponent<RectTransform>().sizeDelta = new Vector2(480f, 150f);
+
+			parent.Find("abilities").gameObject.SetActive(false);
+
+			playButton.gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
+			playButton.gameObject.GetComponent<Button>().onClick.AddListener(PlayButton_OnClick);
+		}
+
+		static void PlayButton_OnClick()
+		{
+			Randomiser.Randomise();
+			info.currentLevel = Randomiser.NextLevel();
+			Manager.Instance().Play();
+		}
+
+		public static void LevelSelectPostfix(GameObject ___pauseMenu)
+		{
+			___pauseMenu.transform.Find("levels").gameObject.SetActive(false); // remove the level select button
+			___pauseMenu.transform.Find("GhostHandler_Pause").gameObject.SetActive(false); // remove ghosts because they for sure mess with the randomiser in ways I don't want to deal with
+		}
+	}
+
+	static class HiddenAbilityPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var original = typeof(AbilitySelector).GetMethod(nameof(AbilitySelector.SelectAbility));
+
+			var patch = typeof(HiddenAbilityPatch).GetMethod(nameof(Postfix));
+
+			harmony.Patch(original, postfix: new HarmonyMethod(patch));
+		}
+
+		public static void Postfix(AbilitySelector __instance)
+		{
+			if (Patcher.EnableSurfingShoes)
+			{ 
+				__instance.movementManager.myAbility = __instance.a_powerLegs;
+				__instance.movementManager.Activate();
+			}
+			if (Patcher.EnableTruckCannon)
+			{
+				__instance.utilityManager.myAbility = __instance.truckCannon;
+				__instance.utilityManager.Activate();
+			}
+		}
+	}
+
 	static class ConfineCursorPatch
 	{
 		public static void Apply(Harmony harmony)
