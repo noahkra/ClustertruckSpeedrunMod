@@ -250,5 +250,17 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["EnableSurfingShoes"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableSpacebarNextLevel {
+            get {
+                return ((bool)(this["EnableSpacebarNextLevel"]));
+            }
+            set {
+                this["EnableSpacebarNextLevel"] = value;
+            }
+        }
     }
 }

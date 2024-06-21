@@ -193,13 +193,15 @@ namespace ClustertruckSpeedrunModLib
 	public static class Patcher
 	{
 		public static bool Patched = false;
-		readonly public static string version = "1.2.2";
+		readonly public static string version = "1.3.0";
 
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
 		public static string prevFPS = null;
 		public static float avgFPS;
 		public static Stopwatch stopwatch = new Stopwatch();
+		public static bool isInLevelComplete = false;
+		public static bool nextLevelPressed = false;
 
 		// Preferences
 		public static bool EnableSpeedometer;
@@ -218,6 +220,7 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableRandomiser;
 		public static bool EnableTruckCannon;
 		public static bool EnableSurfingShoes;
+		public static bool EnableSpacebarNextLevel;
 		
 		public static void PrintAllChildren(Transform parent, int layer)
 		{
@@ -238,7 +241,7 @@ namespace ClustertruckSpeedrunModLib
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
-			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, bool _enableSurfingShoes)
+			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, bool _enableSurfingShoes, bool _enableSpacebarNextLevel)
 		{
 			if (Patched) { return; } // Don't patch again, just incase...
 
@@ -260,6 +263,7 @@ namespace ClustertruckSpeedrunModLib
 			EnableRandomiser = _enableRandomiser;
 			EnableTruckCannon = _enableTruckCannon;
 			EnableSurfingShoes = _enableSurfingShoes;
+			EnableSpacebarNextLevel = _enableSpacebarNextLevel;
 
 			try
 			{
@@ -296,8 +300,11 @@ namespace ClustertruckSpeedrunModLib
 				Console.WriteLine("[SPEEDRUNMOD] Applying FPSPatch...");
 				FPSPatch.Apply(harmony);
 
-				Console.WriteLine("[SPEEDRUNMOD] Applying NextLevelButtonPatch");
-				NextLevelButtonPatch.Apply(harmony);
+				if (EnableSpacebarNextLevel)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying NextLevelButtonPatch");
+					NextLevelButtonPatch.Apply(harmony);
+				}
 
 				if (DisableJump)
 				{
@@ -453,6 +460,47 @@ namespace ClustertruckSpeedrunModLib
 		{
 			___pauseMenu.transform.Find("levels").gameObject.SetActive(false); // remove the level select button
 			___pauseMenu.transform.Find("GhostHandler_Pause").gameObject.SetActive(false); // remove ghosts because they for sure mess with the randomiser in ways I don't want to deal with
+		}
+	}
+
+	static class NextLevelButtonPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var keyDownOriginal = typeof(GameManager).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+			var isInLevelCompeteOriginal = typeof(steam_WorkshopHandler).GetMethod(nameof(steam_WorkshopHandler.UploadScoreToLeaderBoard));
+			var isOutOfLevelCompleteOriginal = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var keyDownPatch = typeof(NextLevelButtonPatch).GetMethod(nameof(KeyDownPostfix));
+			var isInLevelCompletePatch = typeof(NextLevelButtonPatch).GetMethod(nameof(PauseSplitPostfix));
+			var isOutOfLevelCompletePatch = typeof(NextLevelButtonPatch).GetMethod(nameof(unpauseStartPrefix));
+
+			harmony.Patch(keyDownOriginal, postfix: new HarmonyMethod(keyDownPatch));
+			harmony.Patch(isInLevelCompeteOriginal, postfix: new HarmonyMethod(isInLevelCompletePatch));
+			harmony.Patch(isOutOfLevelCompleteOriginal, prefix: new HarmonyMethod(isOutOfLevelCompletePatch));
+		}
+
+		public static void KeyDownPostfix(GameManager __instance)
+		{
+			if (Patcher.isInLevelComplete && !Patcher.nextLevelPressed && Input.GetKeyDown(KeyCode.Space))
+			{
+				Patcher.nextLevelPressed = true; // this needs to be set to prevent calling NextLevel() multiple times if spamming space, which crashes the game.
+				__instance.NextLevel();	
+			}
+		}
+
+		public static void PauseSplitPostfix()
+		{
+			Patcher.isInLevelComplete = true;
+		}
+
+		public static void unpauseStartPrefix(player __instance)
+		{
+			if (__instance.framesSinceStart == 0)
+			{
+				Patcher.isInLevelComplete = false;
+				Patcher.nextLevelPressed = false;
+			}
 		}
 	}
 
