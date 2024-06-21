@@ -262,5 +262,17 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["EnableSpacebarNextLevel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableSpacebarCreditSkip {
+            get {
+                return ((bool)(this["EnableSpacebarCreditSkip"]));
+            }
+            set {
+                this["EnableSpacebarCreditSkip"] = value;
+            }
+        }
     }
 }

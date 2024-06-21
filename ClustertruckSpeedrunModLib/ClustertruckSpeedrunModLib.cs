@@ -221,6 +221,7 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableTruckCannon;
 		public static bool EnableSurfingShoes;
 		public static bool EnableSpacebarNextLevel;
+		public static bool EnableSpacebarCreditSkip;
 		
 		public static void PrintAllChildren(Transform parent, int layer)
 		{
@@ -241,7 +242,8 @@ namespace ClustertruckSpeedrunModLib
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
-			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, bool _enableSurfingShoes, bool _enableSpacebarNextLevel)
+			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, 
+			bool _enableSurfingShoes, bool _enableSpacebarNextLevel, bool _enableSpacebarCreditSkip)
 		{
 			if (Patched) { return; } // Don't patch again, just incase...
 
@@ -264,6 +266,7 @@ namespace ClustertruckSpeedrunModLib
 			EnableTruckCannon = _enableTruckCannon;
 			EnableSurfingShoes = _enableSurfingShoes;
 			EnableSpacebarNextLevel = _enableSpacebarNextLevel;
+			EnableSpacebarCreditSkip = _enableSpacebarCreditSkip;
 
 			try
 			{
@@ -299,6 +302,12 @@ namespace ClustertruckSpeedrunModLib
 
 				Console.WriteLine("[SPEEDRUNMOD] Applying FPSPatch...");
 				FPSPatch.Apply(harmony);
+
+				if (EnableSpacebarCreditSkip)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying CreditSkipPatch");
+					CreditSkipPatch.Apply(harmony);
+				}
 
 				if (EnableSpacebarNextLevel)
 				{
@@ -460,6 +469,27 @@ namespace ClustertruckSpeedrunModLib
 		{
 			___pauseMenu.transform.Find("levels").gameObject.SetActive(false); // remove the level select button
 			___pauseMenu.transform.Find("GhostHandler_Pause").gameObject.SetActive(false); // remove ghosts because they for sure mess with the randomiser in ways I don't want to deal with
+		}
+	}
+
+	static class CreditSkipPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var original = typeof(Credits).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var patch = typeof(CreditSkipPatch).GetMethod(nameof(Postfix));
+
+			harmony.Patch(original, postfix: new HarmonyMethod(patch));
+		}
+
+		public static void Postfix(Credits __instance)
+		{
+			if (Input.GetKeyDown(KeyCode.Space)) 
+			{
+				__instance.gameObject.SetActive(false);
+				Manager.Instance().OpenMainMenuFromGame();
+			}
 		}
 	}
 

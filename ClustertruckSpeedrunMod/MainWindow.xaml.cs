@@ -316,6 +316,7 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTruckCannon.IsChecked))); // EnableTruckCannon
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableSurfingShoes.IsChecked))); // EnableSurfingShoes
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableSpacebarNextLevel.IsChecked))); // EnableSpacebarNextLevel
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableSpacebarCreditSkip.IsChecked))); // EnableSpacebarCreditSkip
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Call, mainModule.ImportReference(patchMethod)));
 
