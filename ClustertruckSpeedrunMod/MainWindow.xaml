@@ -25,8 +25,8 @@
                     <CheckBox x:Name="InvertSprint" Content="Invert Sprint Button" Tag="Invert the sprint button, such that it is no longer necessary to hold it down to sprint. When enabled this effectively turns it into a walk button, because you stop sprinting while pressing it." MouseEnter="DisplayDetails" Height="20"/>
                     <CheckBox x:Name="EnableTimerFix" Content="Enable Timer Fix" Tag="Fix the in-game timer's accuracy and precision. When enabled your timer will be within ~0.01s of what your LiveSplit reports for your times." MouseEnter="DisplayDetails" Height="20"/>
                     <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" Tag="Turn on the timer by default so you don't have to press 'T' to enable it every time." MouseEnter="DisplayDetails" Height="20"/>
-                    <CheckBox x:Name="EnableSpacebarNextLevel" Content="Enable Spacebar For Next Level" Tag="Press spacebar in the level complete screen to go to the next level." MouseEnter="DisplayDetails" Height="20"/>
-                    <CheckBox x:Name="EnableSpacebarCreditSkip" Content="Enable Spacebar To Skip Credits" Tag="Press spacebar to skip the credits section. Works immediately after killing the boss, before the credits even show up." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableNextLevel" Content="Enable Spacebar For Next Level" Tag="Press spacebar in the level complete screen to go to the next level." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableCreditSkip" Content="Enable Escape To Skip Credits" Tag="Press escape to skip the credits section after the clustertruck title shows up." MouseEnter="DisplayDetails" Height="20"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Gameplay">

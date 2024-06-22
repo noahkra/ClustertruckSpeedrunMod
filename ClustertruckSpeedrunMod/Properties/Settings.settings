@@ -59,10 +59,10 @@
     <Setting Name="EnableSurfingShoes" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="EnableSpacebarNextLevel" Type="System.Boolean" Scope="User">
+    <Setting Name="EnableNextLevel" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="EnableSpacebarCreditSkip" Type="System.Boolean" Scope="User">
+    <Setting Name="EnableCreditSkip" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

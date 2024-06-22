@@ -245,7 +245,7 @@ namespace ClustertruckSpeedrunModLib
 			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, 
 			bool _enableSurfingShoes, bool _enableNextLevel, bool _enableCreditSkip)
 		{
-			if (Patched) { return; } // Don't patch again, just incase...
+			if (Patched) { return; } // Don't patch again, just in case...
 
 			FPSinterval = 0;
 
