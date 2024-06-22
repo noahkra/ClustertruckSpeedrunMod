@@ -26,6 +26,8 @@ If you have any feature requests or want to report a bug, make sure to submit an
 - Invert Sprint Button
 - Fix in-game timer accuracy
 - Enable Timer By Default
+- Press space bar in level complete screen to go to the next level
+- Press escape in the credits section to skip the credits
 
 ## Gameplay
 - Randomiser
@@ -42,9 +44,9 @@ If you have any feature requests or want to report a bug, make sure to submit an
 	- Reset In Menu
 
 ## Miscellaneous
+- Custom Truck Colours
 - Enable Speedometer
 	- Configurable to show speed in m/s, km/h or mph.
-- Custom Truck Colours
 
 ### Features wishlist:
 - Airtime timer (for flying% category)
