@@ -220,8 +220,8 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableRandomiser;
 		public static bool EnableTruckCannon;
 		public static bool EnableSurfingShoes;
-		public static bool EnableSpacebarNextLevel;
-		public static bool EnableSpacebarCreditSkip;
+		public static bool EnableNextLevel;
+		public static bool EnableCreditSkip;
 		
 		public static void PrintAllChildren(Transform parent, int layer)
 		{
@@ -243,7 +243,7 @@ namespace ClustertruckSpeedrunModLib
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
 			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, 
-			bool _enableSurfingShoes, bool _enableSpacebarNextLevel, bool _enableSpacebarCreditSkip)
+			bool _enableSurfingShoes, bool _enableNextLevel, bool _enableCreditSkip)
 		{
 			if (Patched) { return; } // Don't patch again, just incase...
 
@@ -265,8 +265,8 @@ namespace ClustertruckSpeedrunModLib
 			EnableRandomiser = _enableRandomiser;
 			EnableTruckCannon = _enableTruckCannon;
 			EnableSurfingShoes = _enableSurfingShoes;
-			EnableSpacebarNextLevel = _enableSpacebarNextLevel;
-			EnableSpacebarCreditSkip = _enableSpacebarCreditSkip;
+			EnableNextLevel = _enableNextLevel;
+			EnableCreditSkip = _enableCreditSkip;
 
 			try
 			{
@@ -303,13 +303,13 @@ namespace ClustertruckSpeedrunModLib
 				Console.WriteLine("[SPEEDRUNMOD] Applying FPSPatch...");
 				FPSPatch.Apply(harmony);
 
-				if (EnableSpacebarCreditSkip)
+				if (EnableCreditSkip)
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying CreditSkipPatch");
 					CreditSkipPatch.Apply(harmony);
 				}
 
-				if (EnableSpacebarNextLevel)
+				if (EnableNextLevel)
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying NextLevelButtonPatch");
 					NextLevelButtonPatch.Apply(harmony);
@@ -483,9 +483,9 @@ namespace ClustertruckSpeedrunModLib
 			harmony.Patch(original, postfix: new HarmonyMethod(patch));
 		}
 
-		public static void Postfix(Credits __instance)
+		public static void Postfix(Credits __instance, float ___counter)
 		{
-			if (Input.GetKeyDown(KeyCode.Space)) 
+			if (___counter > 5f && Input.GetKeyDown(KeyCode.Escape)) 
 			{
 				__instance.gameObject.SetActive(false);
 				Manager.Instance().OpenMainMenuFromGame();
