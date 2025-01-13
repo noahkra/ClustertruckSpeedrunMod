@@ -5,14 +5,14 @@
 
 A patcher for Clustertruck that adds quality of life improvements, mods for speedrunning and more!
 
-***PLEASE NOTE!*** The speedometer is for practice only and is ***NOT*** allowed on the SRC leaderboards!
+> [!caution]
+> ***PLEASE NOTE!*** The speedometer is for practice only and is ***NOT*** allowed on the SRC leaderboards!
 
 If you have any feature requests or want to report a bug, make sure to submit an [issue](https://github.com/noahkra/ClustertruckSpeedrunMod/issues/new/choose) and it might get added in a future release!
 
 # Contents
 - [Features](#features)
 - [How to use](#how-to-use)
-- [Known issues](#known-issues)
 - [FAQ](#faq)
 ***
 
@@ -67,9 +67,8 @@ To enable the auto splitter just enable it in the patches. Select "Split By Worl
 Requirements:
 - You must use LiveSplit 1.8.29 or above. Older versions are not supported.
 - Make sure any other auto splitters, such as the one built into LiveSplit, are disabled.
-
-# Known issues
-- This mod is not compatible with happyrobot33's auto splitter. Instead, use the auto splitter patch provided.
+> [!important]
+> This mod is not compatible with happyrobot33's auto splitter. Instead, use the auto splitter patch provided.
 
 # FAQ
 **It's asking me to install something called .NET Desktop Runtime?**
