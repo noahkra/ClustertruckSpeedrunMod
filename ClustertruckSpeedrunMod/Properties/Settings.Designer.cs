@@ -254,18 +254,6 @@ namespace ClustertruckSpeedrunMod.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool EnableNextLevel {
-            get {
-                return ((bool)(this["EnableNextLevel"]));
-            }
-            set {
-                this["EnableNextLevel"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool EnableCreditSkip {
             get {
                 return ((bool)(this["EnableCreditSkip"]));

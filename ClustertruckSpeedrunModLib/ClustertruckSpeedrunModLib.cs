@@ -200,8 +200,6 @@ namespace ClustertruckSpeedrunModLib
 		public static string prevFPS = null;
 		public static float avgFPS;
 		public static Stopwatch stopwatch = new Stopwatch();
-		public static bool isInLevelComplete = false;
-		public static bool nextLevelPressed = false;
 
 		// Preferences
 		public static bool EnableSpeedometer;
@@ -220,7 +218,6 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableRandomiser;
 		public static bool EnableTruckCannon;
 		public static bool EnableSurfingShoes;
-		public static bool EnableNextLevel;
 		public static bool EnableCreditSkip;
 		
 		public static void PrintAllChildren(Transform parent, int layer)
@@ -243,7 +240,7 @@ namespace ClustertruckSpeedrunModLib
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
 			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, 
-			bool _enableSurfingShoes, bool _enableNextLevel, bool _enableCreditSkip)
+			bool _enableSurfingShoes, bool _enableCreditSkip)
 		{
 			if (Patched) { return; } // Don't patch again, just in case...
 
@@ -265,7 +262,6 @@ namespace ClustertruckSpeedrunModLib
 			EnableRandomiser = _enableRandomiser;
 			EnableTruckCannon = _enableTruckCannon;
 			EnableSurfingShoes = _enableSurfingShoes;
-			EnableNextLevel = _enableNextLevel;
 			EnableCreditSkip = _enableCreditSkip;
 
 			try
@@ -307,12 +303,6 @@ namespace ClustertruckSpeedrunModLib
 				{
 					Console.WriteLine("[SPEEDRUNMOD] Applying CreditSkipPatch");
 					CreditSkipPatch.Apply(harmony);
-				}
-
-				if (EnableNextLevel)
-				{
-					Console.WriteLine("[SPEEDRUNMOD] Applying NextLevelButtonPatch");
-					NextLevelButtonPatch.Apply(harmony);
 				}
 
 				if (DisableJump)
@@ -489,47 +479,6 @@ namespace ClustertruckSpeedrunModLib
 			{
 				__instance.gameObject.SetActive(false);
 				Manager.Instance().OpenMainMenuFromGame();
-			}
-		}
-	}
-
-	static class NextLevelButtonPatch
-	{
-		public static void Apply(Harmony harmony)
-		{
-			var keyDownOriginal = typeof(GameManager).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
-			var isInLevelCompeteOriginal = typeof(steam_WorkshopHandler).GetMethod(nameof(steam_WorkshopHandler.UploadScoreToLeaderBoard));
-			var isOutOfLevelCompleteOriginal = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
-
-			var keyDownPatch = typeof(NextLevelButtonPatch).GetMethod(nameof(KeyDownPostfix));
-			var isInLevelCompletePatch = typeof(NextLevelButtonPatch).GetMethod(nameof(PauseSplitPostfix));
-			var isOutOfLevelCompletePatch = typeof(NextLevelButtonPatch).GetMethod(nameof(unpauseStartPrefix));
-
-			harmony.Patch(keyDownOriginal, postfix: new HarmonyMethod(keyDownPatch));
-			harmony.Patch(isInLevelCompeteOriginal, postfix: new HarmonyMethod(isInLevelCompletePatch));
-			harmony.Patch(isOutOfLevelCompleteOriginal, prefix: new HarmonyMethod(isOutOfLevelCompletePatch));
-		}
-
-		public static void KeyDownPostfix(GameManager __instance)
-		{
-			if (Patcher.isInLevelComplete && !Patcher.nextLevelPressed && Input.GetKeyDown(KeyCode.Space))
-			{
-				Patcher.nextLevelPressed = true; // this needs to be set to prevent calling NextLevel() multiple times if spamming space, which crashes the game.
-				__instance.NextLevel();	
-			}
-		}
-
-		public static void PauseSplitPostfix()
-		{
-			Patcher.isInLevelComplete = true;
-		}
-
-		public static void unpauseStartPrefix(player __instance)
-		{
-			if (__instance.framesSinceStart == 0)
-			{
-				Patcher.isInLevelComplete = false;
-				Patcher.nextLevelPressed = false;
 			}
 		}
 	}

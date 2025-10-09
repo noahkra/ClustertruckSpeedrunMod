@@ -21,12 +21,13 @@
                         <TextBlock x:Name="TargetFPSValue" TextWrapping="Wrap" Text="240" Margin="10,0,0,0"/>
                     </StackPanel>
                     <CheckBox x:Name="EnableFPSCounter" Content="Enable FPS Counter" Tag="Enable the in-game FPS counter, which shows your current FPS." MouseEnter="DisplayDetails" Height="20"/>
+                    <Separator Height="2" Margin="0,0,0,5"/>
                     <CheckBox x:Name="ConfineCursor" Content="Confine Cursor To The Game Window" Tag="Confine the cursor to the game window during gameplay. When enabled this prevents the cursor from leaving the game window while you are not in the main menu. No more clicking out of the game when you die!" MouseEnter="DisplayDetails" Height="20"/>
-                    <CheckBox x:Name="InvertSprint" Content="Invert Sprint Button" Tag="Invert the sprint button, such that it is no longer necessary to hold it down to sprint. When enabled this effectively turns it into a walk button, because you stop sprinting while pressing it." MouseEnter="DisplayDetails" Height="20"/>
-                    <CheckBox x:Name="EnableTimerFix" Content="Enable Timer Fix" Tag="Fix the in-game timer's accuracy and precision. When enabled your timer will be within ~0.01s of what your LiveSplit reports for your times." MouseEnter="DisplayDetails" Height="20"/>
-                    <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" Tag="Turn on the timer by default so you don't have to press 'T' to enable it every time." MouseEnter="DisplayDetails" Height="20"/>
-                    <CheckBox x:Name="EnableNextLevel" Content="Enable Spacebar For Next Level" Tag="Press spacebar in the level complete screen to go to the next level." MouseEnter="DisplayDetails" Height="20"/>
                     <CheckBox x:Name="EnableCreditSkip" Content="Enable Escape To Skip Credits" Tag="Press escape to skip the credits section after the clustertruck title shows up." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="InvertSprint" Content="Invert Sprint Button" Tag="Invert the sprint button, such that it is no longer necessary to hold it down to sprint. When enabled this effectively turns it into a walk button, because you stop sprinting while pressing it." MouseEnter="DisplayDetails" Height="20"/>
+                    <Separator Height="2" Margin="0,0,0,5"/>
+                    <CheckBox x:Name="EnableTimer" Content="Enable Timer By Default" Tag="Turn on the timer by default so you don't have to press 'T' to enable it every time." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnableTimerFix" Content="Enable Timer Fix" Tag="Fix the in-game timer's accuracy and precision. When enabled your timer will be within ~0.01s of what your LiveSplit reports for your times." MouseEnter="DisplayDetails" Height="20"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Gameplay">
