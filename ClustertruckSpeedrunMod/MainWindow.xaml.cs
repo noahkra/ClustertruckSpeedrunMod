@@ -14,6 +14,7 @@ namespace ClustertruckSpeedrunMod
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		public static readonly string VERSION = "v1.4.0";
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -25,6 +26,8 @@ namespace ClustertruckSpeedrunMod
 			LoadSettings();
 
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
+
+			this.Title = $"Clustertruck Speedrun Mod {VERSION} PATCHER";
 		}
 
 		private void SetupControlEvents(DependencyObject container)
@@ -296,6 +299,8 @@ namespace ClustertruckSpeedrunMod
 					var patchMethod = patchType.Methods.FirstOrDefault(m => m.Name == "DoPatching");
 
 					var color = System.Drawing.ColorTranslator.FromHtml((bool)EnableTruckColor.IsChecked ? TruckColor.Text : "#FFFFFF");
+
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldstr, VERSION)); // Version
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableSpeedometer.IsChecked))); // EnableSpeedometer
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_I4, GetSpeedUnitInt())); // SpeedUnit

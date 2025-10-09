@@ -193,7 +193,6 @@ namespace ClustertruckSpeedrunModLib
 	public static class Patcher
 	{
 		public static bool Patched = false;
-		readonly public static string version = "1.4.0";
 
 		public static Rigidbody playRig = null;
 		public static int FPSinterval;
@@ -219,6 +218,8 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableTruckCannon;
 		public static bool EnableSurfingShoes;
 		public static bool EnableCreditSkip;
+
+		public static string version;
 		
 		public static void PrintAllChildren(Transform parent, int layer)
 		{
@@ -234,7 +235,7 @@ namespace ClustertruckSpeedrunModLib
 		}
 
 		public static void DoPatching(
-			bool _enableSpeedometer, int _speedUnit,
+			string _version, bool _enableSpeedometer, int _speedUnit,
 			float _truckColorR, float _truckColorG, float _truckColorB,
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
@@ -245,6 +246,8 @@ namespace ClustertruckSpeedrunModLib
 			if (Patched) { return; } // Don't patch again, just in case...
 
 			FPSinterval = 0;
+
+			version = _version;
 
 			EnableSpeedometer = _enableSpeedometer;
 			SpeedUnit = _speedUnit;
@@ -589,7 +592,7 @@ namespace ClustertruckSpeedrunModLib
 			Text playButtonText = parent.Find("play").Find("Text").GetComponent<Text>();
 			GameObject title = new GameObject("SpeedrunmodTitle");
 			Text titleText = title.AddComponent<Text>();
-			titleText.text = $"Clustertruck Speedrun Mod v{Patcher.version}";
+			titleText.text = $"Clustertruck Speedrun Mod {Patcher.version}";
 			titleText.font = playButtonText.font;
 			titleText.color = playButtonText.color;
 			titleText.fontSize = 32;
