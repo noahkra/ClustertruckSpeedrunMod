@@ -364,8 +364,7 @@ namespace ClustertruckSpeedrunMod
 
 		private void BrowseFolders_Click(object sender, RoutedEventArgs e)
 		{
-			var dialog = new CommonOpenFileDialog();
-			dialog.IsFolderPicker = true;
+			var dialog = new CommonOpenFileDialog{ IsFolderPicker = true };
 
 			if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
 			{
@@ -379,7 +378,7 @@ namespace ClustertruckSpeedrunMod
 			ProgressText.Text = msg;
 		}
 
-		OpCode BoolToOpCode(bool? a)
+		private static OpCode BoolToOpCode(bool? a)
 		{
 			if (a == null)
 			{

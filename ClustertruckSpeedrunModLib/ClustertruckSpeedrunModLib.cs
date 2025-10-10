@@ -371,7 +371,7 @@ namespace ClustertruckSpeedrunModLib
 			var menuReset2Original = typeof(Manager).GetMethod(nameof(Manager.OpenMainMenuFromGame));
 
 			var pauseSplitPatch = typeof(LivesplitPatch).GetMethod(nameof(PauseSplitPostfix));
-			var unpauseStartPatch = typeof(LivesplitPatch).GetMethod(nameof(unpauseStartPrefix));
+			var unpauseStartPatch = typeof(LivesplitPatch).GetMethod(nameof(UnpauseStartPrefix));
 			var menuResetPatch = typeof(LivesplitPatch).GetMethod(nameof(MenuResetPostfix));
 
 			harmony.Patch(pauseSplitOriginal, postfix: new HarmonyMethod(pauseSplitPatch));
@@ -391,7 +391,7 @@ namespace ClustertruckSpeedrunModLib
 			}
 		}
 
-		public static void unpauseStartPrefix(player __instance)
+		public static void UnpauseStartPrefix(player __instance)
 		{
 			if (__instance.framesSinceStart == 0)
 			{
@@ -658,23 +658,23 @@ namespace ClustertruckSpeedrunModLib
 				Patcher.FPSinterval = 0;
 			}
 
-			string velocity = null;
+			string velocity;
 
 			if (Patcher.SplitSpeedometerHV)
 			{
 				switch (Patcher.SpeedUnit)
 				{
 					case 1:
-						velocity = $"H:{(new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude * 3.6f).ToString("0")}km/h\n" +
-								   $"V:{(Patcher.playRig.velocity.y * 3.6f).ToString("0")}km/h";
+						velocity = $"H:{new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude * 3.6f:0}km/h\n" +
+								   $"V:{Patcher.playRig.velocity.y * 3.6f:0}km/h";
 						break;
 					case 2:
-						velocity = $"H:{(new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude * 2.236936f).ToString("0")}mph\n" +
-								   $"V:{(Patcher.playRig.velocity.y * 2.236936f).ToString("0")}mph";
+						velocity = $"H:{new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude * 2.236936f:0}mph\n" +
+								   $"V:{Patcher.playRig.velocity.y * 2.236936f:0}mph";
 						break;
 					default:
-						velocity = $"H:{new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude.ToString("0")}m/s\n" +
-								   $"V:{Patcher.playRig.velocity.y.ToString("0")}m/s";
+						velocity = $"H:{new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude:0}m/s\n" +
+								   $"V:{Patcher.playRig.velocity.y:0}m/s";
 						break;
 				}
 			} else
@@ -682,13 +682,13 @@ namespace ClustertruckSpeedrunModLib
 				switch (Patcher.SpeedUnit)
 				{
 					case 1:
-						velocity = $"{(Patcher.playRig.velocity.magnitude * 3.6f).ToString("0")}km/h";
+						velocity = $"{Patcher.playRig.velocity.magnitude * 3.6f:0}km/h";
 						break;
 					case 2:
-						velocity = $"{(Patcher.playRig.velocity.magnitude * 2.236936f).ToString("0")}mph";
+						velocity = $"{Patcher.playRig.velocity.magnitude * 2.236936f:0}mph";
 						break;
 					default:
-						velocity = $"{Patcher.playRig.velocity.magnitude.ToString("0")}m/s";
+						velocity = $"{Patcher.playRig.velocity.magnitude:0}m/s";
 						break;
 				}
 			}
@@ -697,18 +697,7 @@ namespace ClustertruckSpeedrunModLib
 			{
 				TimeSpan ts = Patcher.stopwatch.Elapsed;
 
-				if (ts.Hours > 0)
-				{
-					val = string.Format("{0:00}:{1:00}:{2:00}.{3:000}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
-				}
-				if (ts.Minutes > 0)
-				{
-					val = string.Format("{0:00}:{1:00}.{2:000}", ts.Minutes, ts.Seconds, ts.Milliseconds);
-				}
-				else
-				{
-					val = string.Format("{0:00}.{1:000}", ts.Seconds, ts.Milliseconds);
-				}
+				val = $"{(ts.Hours > 0 ? $"{ts.Hours:00}:" : "")}{(ts.Minutes > 0 ? $"{ts.Minutes:00}:" : "")}{ts.Seconds:00}.{ts.Milliseconds:000}";
 			}
 
 			string m = info.abilityName;
@@ -855,7 +844,7 @@ namespace ClustertruckSpeedrunModLib
 			harmony.Patch(original, postfix: new HarmonyMethod(patch));
 		}
 
-		public static void Postfix(ref PlayerClock ___PlayerClock)
+		public static void Postfix()
 		{
 			info.ShowClock = true;
 		}
