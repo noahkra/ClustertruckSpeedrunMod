@@ -1,7 +1,10 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
+using System.Net.Http;
 using System.Windows;
 using Mono.Cecil.Cil;
 using Mono.Cecil;
@@ -9,6 +12,12 @@ using System.IO;
 
 namespace ClustertruckSpeedrunMod
 {
+	public class Release
+	{
+		public string tag_name { get; set; }
+		public string html_url { get; set; }
+	}
+
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
@@ -28,6 +37,39 @@ namespace ClustertruckSpeedrunMod
 			TargetFPSValue.Text = TargetFPS.Value.ToString("0");
 
 			this.Title = $"Clustertruck Speedrun Mod {VERSION} PATCHER";
+#if !DEBUG
+			CheckForUpdates();
+#endif
+		}
+
+		private static async void CheckForUpdates() // Thanks past me for figuring this one out. Still quite genius imho.
+		{
+			HttpClient client = new();
+			try
+			{
+				client.DefaultRequestHeaders.Add("User-Agent", "CTSRM Update Checker");
+				HttpResponseMessage response = await client.GetAsync("https://api.github.com/repos/noahkra/ClustertruckSpeedrunMod/releases");
+				response.EnsureSuccessStatusCode();
+
+				Release[]? releases = JsonSerializer.Deserialize<Release[]>(await response.Content.ReadAsStringAsync());
+
+				if (releases == null) { return; }
+
+				if (!String.Equals(releases[0].tag_name, VERSION)) {
+					MessageBoxResult res = MessageBox.Show($"A new version of the Clustertruck Speedrun Mod ({releases[0].tag_name}) is available on GitHub.\n\nWould you like to open the release page to download?", 
+						"A new update is available!", MessageBoxButton.YesNo);
+
+					if (res == MessageBoxResult.Yes) {
+						Process.Start(new ProcessStartInfo
+						{
+							FileName = releases[0].html_url,
+							UseShellExecute = true
+						});
+					}
+				}
+			} catch (Exception ex) { 
+				Console.WriteLine(ex.Message);
+			}
 		}
 
 		private void SetupControlEvents(DependencyObject container)
