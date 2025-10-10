@@ -202,6 +202,7 @@ namespace ClustertruckSpeedrunModLib
 
 		// Preferences
 		public static bool EnableSpeedometer;
+		public static bool SplitSpeedometerHV;
 		public static int SpeedUnit;
 		public static Color TruckColor;
 		public static int TargetFramerate;
@@ -235,8 +236,8 @@ namespace ClustertruckSpeedrunModLib
 		}
 
 		public static void DoPatching(
-			string _version, bool _enableSpeedometer, int _speedUnit,
-			float _truckColorR, float _truckColorG, float _truckColorB,
+			string _version, bool _enableSpeedometer, bool _splitSpeedometerHV,
+			int _speedUnit, float _truckColorR, float _truckColorG, float _truckColorB,
 			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
@@ -250,6 +251,7 @@ namespace ClustertruckSpeedrunModLib
 			version = _version;
 
 			EnableSpeedometer = _enableSpeedometer;
+			SplitSpeedometerHV = _splitSpeedometerHV;
 			SpeedUnit = _speedUnit;
 			TruckColor = new Color(_truckColorR, _truckColorG, _truckColorB, 1f);
 			TargetFramerate = _targetFramerate;
@@ -650,17 +652,37 @@ namespace ClustertruckSpeedrunModLib
 
 			string velocity = null;
 
-			switch (Patcher.SpeedUnit)
+			if (Patcher.SplitSpeedometerHV)
 			{
-				case 1:
-					velocity = $"{(Patcher.playRig.velocity.magnitude * 3.6f).ToString("0")}km/h";
-					break;
-				case 2:
-					velocity = $"{(Patcher.playRig.velocity.magnitude * 2.236936f).ToString("0")}mph";
-					break;
-				default:
-					velocity = $"{Patcher.playRig.velocity.magnitude.ToString("0")}m/s";
-					break;
+				switch (Patcher.SpeedUnit)
+				{
+					case 1:
+						velocity = $"H:{(new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude * 3.6f).ToString("0")}km/h\n" +
+								   $"V:{(Patcher.playRig.velocity.y * 3.6f).ToString("0")}km/h";
+						break;
+					case 2:
+						velocity = $"H:{(new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude * 2.236936f).ToString("0")}mph\n" +
+								   $"V:{(Patcher.playRig.velocity.y * 2.236936f).ToString("0")}mph";
+						break;
+					default:
+						velocity = $"H:{new Vector2(Patcher.playRig.velocity.x, Patcher.playRig.velocity.z).magnitude.ToString("0")}m/s\n" +
+								   $"V:{Patcher.playRig.velocity.y.ToString("0")}m/s";
+						break;
+				}
+			} else
+			{
+				switch (Patcher.SpeedUnit)
+				{
+					case 1:
+						velocity = $"{(Patcher.playRig.velocity.magnitude * 3.6f).ToString("0")}km/h";
+						break;
+					case 2:
+						velocity = $"{(Patcher.playRig.velocity.magnitude * 2.236936f).ToString("0")}mph";
+						break;
+					default:
+						velocity = $"{Patcher.playRig.velocity.magnitude.ToString("0")}m/s";
+						break;
+				}
 			}
 
 			if (Patcher.EnableTimerFix)

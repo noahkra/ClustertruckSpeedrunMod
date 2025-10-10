@@ -262,5 +262,17 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["EnableCreditSkip"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SplitSpeedometerHV {
+            get {
+                return ((bool)(this["SplitSpeedometerHV"]));
+            }
+            set {
+                this["SplitSpeedometerHV"] = value;
+            }
+        }
     }
 }

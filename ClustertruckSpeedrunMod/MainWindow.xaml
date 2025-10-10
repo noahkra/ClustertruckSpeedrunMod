@@ -60,7 +60,7 @@
                         <RadioButton x:Name="kmph" GroupName="SpeedUnit" Content="km/h" Tag="Configure the speedometer to show speed in km/h.&#x0a;(1u/s = 3,6km/h)" MouseEnter="DisplayDetails" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                         <RadioButton x:Name="mph" GroupName="SpeedUnit" Content="mph" Tag="Configure the speedometer to show speed in mph.&#x0a;(1u/s = 2,2369mph)" MouseEnter="DisplayDetails" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" IsEnabled="False"/>
                     </StackPanel>
-
+                    <CheckBox x:Name="SplitSpeedometerHV" Content="Split Speedometer Horizontal/Vertical" Tag="Split speedometer into Horizontal and Vertical speed." MouseEnter="DisplayDetails" Height="20" Width="290" IsEnabled="False" Margin="19,5,0,0"/>
                 </StackPanel>
             </TabItem>
         </TabControl>

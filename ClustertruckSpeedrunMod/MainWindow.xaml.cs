@@ -110,6 +110,7 @@ namespace ClustertruckSpeedrunMod
 			mps.IsEnabled = isChecked;
 			kmph.IsEnabled = isChecked;
 			mph.IsEnabled = isChecked;
+			SplitSpeedometerHV.IsEnabled = isChecked;
 		}
 
 		private void UnlockFPS_CheckChanged(object sender, RoutedEventArgs e)
@@ -303,6 +304,7 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldstr, VERSION)); // Version
 
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableSpeedometer.IsChecked))); // EnableSpeedometer
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitSpeedometerHV.IsChecked))); // SplitSpeedometerHV
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_I4, GetSpeedUnitInt())); // SpeedUnit
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.R / 255f)); // TruckColor.r
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.G / 255f)); // TruckColor.g
