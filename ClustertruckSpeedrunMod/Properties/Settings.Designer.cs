@@ -274,5 +274,17 @@ namespace ClustertruckSpeedrunMod.Properties {
                 this["SplitSpeedometerHV"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnablePointsAudioFix {
+            get {
+                return ((bool)(this["EnablePointsAudioFix"]));
+            }
+            set {
+                this["EnablePointsAudioFix"] = value;
+            }
+        }
     }
 }

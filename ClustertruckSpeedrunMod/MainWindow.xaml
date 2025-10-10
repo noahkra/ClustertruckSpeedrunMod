@@ -21,6 +21,7 @@
                         <TextBlock x:Name="TargetFPSValue" TextWrapping="Wrap" Text="240" Margin="10,0,0,0"/>
                     </StackPanel>
                     <CheckBox x:Name="EnableFPSCounter" Content="Enable FPS Counter" Tag="Enable the in-game FPS counter, which shows your current FPS." MouseEnter="DisplayDetails" Height="20"/>
+                    <CheckBox x:Name="EnablePointsAudioFix" Content="Enable Points Audio Fix" Tag="Lower the volume of the points ticker to fix it cutting out the music at higher framerates." MouseEnter="DisplayDetails" Height="20"/>
                     <Separator Height="2" Margin="0,0,0,5"/>
                     <CheckBox x:Name="ConfineCursor" Content="Confine Cursor To The Game Window" Tag="Confine the cursor to the game window during gameplay. When enabled this prevents the cursor from leaving the game window while you are not in the main menu. No more clicking out of the game when you die!" MouseEnter="DisplayDetails" Height="20"/>
                     <CheckBox x:Name="EnableCreditSkip" Content="Enable Escape To Skip Credits" Tag="Press escape to skip the credits section after the clustertruck title shows up." MouseEnter="DisplayDetails" Height="20"/>

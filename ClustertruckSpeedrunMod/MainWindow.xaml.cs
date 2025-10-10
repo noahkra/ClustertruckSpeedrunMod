@@ -310,6 +310,7 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.G / 255f)); // TruckColor.g
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_R4, (float)color.B / 255f)); // TruckColor.b
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(OpCodes.Ldc_I4, (bool)UnlockFPS.IsChecked ? (int)TargetFPS.Value : 90)); // TargetFramerate
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnablePointsAudioFix.IsChecked))); // EnablePointsAudioFix
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableFPSCounter.IsChecked))); // EnableFPSCounter
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(DisableJump.IsChecked))); // DisableJump
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(InvertSprint.IsChecked))); // InvertSprint

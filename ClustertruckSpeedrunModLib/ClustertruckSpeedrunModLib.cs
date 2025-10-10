@@ -206,6 +206,7 @@ namespace ClustertruckSpeedrunModLib
 		public static int SpeedUnit;
 		public static Color TruckColor;
 		public static int TargetFramerate;
+		public static bool EnablePointsAudioFix;
 		public static bool EnableFPSCounter;
 		public static bool DisableJump;
 		public static bool InvertSprint;
@@ -238,7 +239,7 @@ namespace ClustertruckSpeedrunModLib
 		public static void DoPatching(
 			string _version, bool _enableSpeedometer, bool _splitSpeedometerHV,
 			int _speedUnit, float _truckColorR, float _truckColorG, float _truckColorB,
-			int _targetFramerate, bool _enableFPSCounter, bool _disableJump,
+			int _targetFramerate, bool _enablePointsAudioFix, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
 			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
 			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, 
@@ -255,6 +256,7 @@ namespace ClustertruckSpeedrunModLib
 			SpeedUnit = _speedUnit;
 			TruckColor = new Color(_truckColorR, _truckColorG, _truckColorB, 1f);
 			TargetFramerate = _targetFramerate;
+			EnablePointsAudioFix = _enablePointsAudioFix;
 			EnableFPSCounter = _enableFPSCounter;
 			DisableJump = _disableJump;
 			InvertSprint = _invertSprint;
@@ -303,6 +305,12 @@ namespace ClustertruckSpeedrunModLib
 
 				Console.WriteLine("[SPEEDRUNMOD] Applying FPSPatch...");
 				FPSPatch.Apply(harmony);
+
+				if (EnablePointsAudioFix)
+				{
+					Console.WriteLine("[SPEEDRUNMOD] Applying PointsAudioPatch");
+					PointsAudioPatch.Apply(harmony);
+				}
 
 				if (EnableCreditSkip)
 				{
@@ -801,6 +809,33 @@ namespace ClustertruckSpeedrunModLib
 				if (codes[i].opcode == OpCodes.Ldstr && (string)codes[i].operand == "Sprint")
 				{
 					codes[i + 2].opcode = OpCodes.Brfalse_S;
+					break;
+				}
+			}
+
+			return codes.AsEnumerable();
+		}
+	}
+
+	static class PointsAudioPatch
+	{
+		public static void Apply(Harmony harmony)
+		{
+			var original = AccessTools.Method(typeof(scoreHandler), "ShowScore");
+
+			var patch = typeof(PointsAudioPatch).GetMethod(nameof(Transpiler));
+
+			harmony.Patch(AccessTools.EnumeratorMoveNext(original), transpiler: new HarmonyMethod(patch));
+		}
+
+		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+		{
+			var codes = new List<CodeInstruction>(instructions);
+			for (var i = 0; i < codes.Count; i++)
+			{
+				if (codes[i].opcode == OpCodes.Ldc_R4 && (float)codes[i].operand == 0.5f)
+				{
+					codes[i].operand = 0.2f;
 					break;
 				}
 			}
