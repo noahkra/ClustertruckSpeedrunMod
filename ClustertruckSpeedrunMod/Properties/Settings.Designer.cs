@@ -182,12 +182,12 @@ namespace ClustertruckSpeedrunMod.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool SplitResetInMenu {
+        public bool SplitResetOnPrevLvl {
             get {
-                return ((bool)(this["SplitResetInMenu"]));
+                return ((bool)(this["SplitResetOnPrevLvl"]));
             }
             set {
-                this["SplitResetInMenu"] = value;
+                this["SplitResetOnPrevLvl"] = value;
             }
         }
         

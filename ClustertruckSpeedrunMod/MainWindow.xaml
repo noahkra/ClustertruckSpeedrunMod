@@ -47,7 +47,7 @@
                             <RadioButton x:Name="SplitByWorld" GroupName="SplitBy" Content="Split By World" Tag="Split every time you complete a world. IGT time still pauses in level complete screens." MouseEnter="DisplayDetails" IsChecked="True" IsEnabled="False"/>
                             <RadioButton x:Name="SplitByLevel" GroupName="SplitBy" Content="Split By Level" Tag="Split every time you complete a level." MouseEnter="DisplayDetails" IsEnabled="False" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <CheckBox x:Name="SplitResetInMenu" Content="Reset In Menu" Tag="Reset LiveSplit when leaving to the Level Select screen. Useful for quickly resetting a run." MouseEnter="DisplayDetails" Height="20" Width="290" IsEnabled="False" Padding="6,-1,0,0" Margin="0,2,0,0"/>
+                        <CheckBox x:Name="SplitResetOnPrevLvl" Content="Reset on previous level select" Tag="Reset LiveSplit when selecting a previous level in the Level Select screen. Useful for quickly resetting a run." MouseEnter="DisplayDetails" Height="20" Width="290" IsEnabled="False" Padding="6,-1,0,0" Margin="0,2,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>

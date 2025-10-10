@@ -41,7 +41,7 @@
     <Setting Name="SplitByLevel" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="SplitResetInMenu" Type="System.Boolean" Scope="User">
+    <Setting Name="SplitResetOnPrevLvl" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ConfineCursor" Type="System.Boolean" Scope="User">

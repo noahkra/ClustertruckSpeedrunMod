@@ -18,7 +18,7 @@ namespace ClustertruckSpeedrunModLib
 		public static NamedPipeClientStream client = null;
 		public static StreamReader pipeReader = null;
 		public static StreamWriter pipeWriter = null;
-		public static bool FirstSplit;
+		public static int oldLevel;
 
 		public static void Connect()
 		{
@@ -213,7 +213,7 @@ namespace ClustertruckSpeedrunModLib
 		public static bool EnableTimer;
 		public static bool EnableLivesplit;
 		public static bool SplitByLevel;
-		public static bool SplitResetInMenu;
+		public static bool SplitResetOnPrevLvl;
 		public static bool ConfineCursor;
 		public static bool EnableTimerFix;
 		public static bool EnableRandomiser;
@@ -241,7 +241,7 @@ namespace ClustertruckSpeedrunModLib
 			int _speedUnit, float _truckColorR, float _truckColorG, float _truckColorB,
 			int _targetFramerate, bool _enablePointsAudioFix, bool _enableFPSCounter, bool _disableJump,
 			bool _invertSprint, bool _enableTimer, bool _enableLivesplit,
-			bool _splitByLevel, bool _splitResetInMenu, bool _confineCursor,
+			bool _splitByLevel, bool _splitResetOnPrevLvl, bool _confineCursor,
 			bool _enableTimerFix, bool _enableRandomiser, bool _enableTruckCannon, 
 			bool _enableSurfingShoes, bool _enableCreditSkip)
 		{
@@ -263,7 +263,7 @@ namespace ClustertruckSpeedrunModLib
 			EnableTimer = _enableTimer;
 			EnableLivesplit = _enableLivesplit;
 			SplitByLevel = _splitByLevel;
-			SplitResetInMenu = _splitResetInMenu;
+			SplitResetOnPrevLvl = _splitResetOnPrevLvl;
 			ConfineCursor = _confineCursor;
 			EnableTimerFix = _enableTimerFix;
 			EnableRandomiser = _enableRandomiser;
@@ -367,17 +367,20 @@ namespace ClustertruckSpeedrunModLib
 		{
 			var pauseSplitOriginal = typeof(steam_WorkshopHandler).GetMethod(nameof(steam_WorkshopHandler.UploadScoreToLeaderBoard));
 			var unpauseStartOriginal = typeof(player).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance);
-			var menuResetOriginal = typeof(Manager).GetMethod(nameof(Manager.ActuallyGoToLevelSelect));
-			var menuReset2Original = typeof(Manager).GetMethod(nameof(Manager.OpenMainMenuFromGame));
+			var menuUnpauseOriginal = typeof(Manager).GetMethod(nameof(Manager.ActuallyGoToLevelSelect));
+			var menuUnpause2Original = typeof(Manager).GetMethod(nameof(Manager.OpenMainMenuFromGame));
+			var prevLevelResetOriginal = typeof(Manager).GetMethod("Update", BindingFlags.NonPublic| BindingFlags.Instance);
 
 			var pauseSplitPatch = typeof(LivesplitPatch).GetMethod(nameof(PauseSplitPostfix));
 			var unpauseStartPatch = typeof(LivesplitPatch).GetMethod(nameof(UnpauseStartPrefix));
-			var menuResetPatch = typeof(LivesplitPatch).GetMethod(nameof(MenuResetPostfix));
+			var menuUnpausePatch = typeof(LivesplitPatch).GetMethod(nameof(MenuUnpausePostfix));
+			var prevLevelResetPatch = typeof(LivesplitPatch).GetMethod(nameof(PrevLevelResetPostfix));
 
 			harmony.Patch(pauseSplitOriginal, postfix: new HarmonyMethod(pauseSplitPatch));
 			harmony.Patch(unpauseStartOriginal, prefix: new HarmonyMethod(unpauseStartPatch));
-			harmony.Patch(menuResetOriginal, postfix: new HarmonyMethod(menuResetPatch));
-			harmony.Patch(menuReset2Original, postfix: new HarmonyMethod(menuResetPatch));
+			harmony.Patch(menuUnpauseOriginal, postfix: new HarmonyMethod(menuUnpausePatch));
+			harmony.Patch(menuUnpause2Original, postfix: new HarmonyMethod(menuUnpausePatch));
+			harmony.Patch(prevLevelResetOriginal, prefix: new HarmonyMethod(prevLevelResetPatch));
 		}
 
 		public static void PauseSplitPostfix()
@@ -413,17 +416,25 @@ namespace ClustertruckSpeedrunModLib
 			}
 		}
 
-		public static void MenuResetPostfix() {
+		public static void MenuUnpausePostfix() {
 			if (!Autosplitter.IsConnected())
 			{
 				Autosplitter.Connect();
 			}
-			if (Patcher.SplitResetInMenu)
-			{
-				Autosplitter.Reset();
-			}
 
 			Autosplitter.UnpauseGameTime();
+		}
+
+		public static void PrevLevelResetPostfix()
+		{
+			if (!Patcher.EnableRandomiser && Patcher.SplitResetOnPrevLvl)
+			{
+				if (info.currentLevel < Autosplitter.oldLevel)
+				{
+					Autosplitter.Reset();
+				}
+				Autosplitter.oldLevel = info.currentLevel;
+			}
 		}
 	}
 	

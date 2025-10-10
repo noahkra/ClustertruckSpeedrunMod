@@ -137,7 +137,7 @@ namespace ClustertruckSpeedrunMod
 			bool isChecked = (bool)((CheckBox)sender).IsChecked;
 			SplitByLevel.IsEnabled = isChecked;
 			SplitByWorld.IsEnabled = isChecked;
-			SplitResetInMenu.IsEnabled = isChecked;
+			SplitResetOnPrevLvl.IsEnabled = isChecked;
 		}
 
 		private void EnableTruckColor_CheckChanged(object sender, RoutedEventArgs e)
@@ -359,7 +359,7 @@ namespace ClustertruckSpeedrunMod
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTimer.IsChecked))); // EnableTimer
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableLivesplit.IsChecked))); // EnableLivesplit
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitByLevel.IsChecked))); // SplitByLevel
-					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitResetInMenu.IsChecked))); // SplitResetInMenu
+					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(SplitResetOnPrevLvl.IsChecked))); // SplitResetOnPrevLvl
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(ConfineCursor.IsChecked))); // ConfineCursor
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableTimerFix.IsChecked))); // EnableTimerFix
 					ilProcessor.InsertBefore(firstInstruction, ilProcessor.Create(BoolToOpCode(EnableRandomiser.IsChecked))); // EnableRandomiser
