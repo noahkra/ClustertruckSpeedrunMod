@@ -422,6 +422,8 @@ namespace ClustertruckSpeedrunModLib
 			{
 				Autosplitter.Reset();
 			}
+
+			Autosplitter.UnpauseGameTime();
 		}
 	}
 	
