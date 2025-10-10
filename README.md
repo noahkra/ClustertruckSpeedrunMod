@@ -22,12 +22,12 @@ If you have any feature requests or want to report a bug, make sure to submit an
 - Unlock FPS
 	- Up to 240fps, which is the maximum allowed by the SRC leaderboards.
 - Enable FPS counter
+- Fix audio bug caused by unlocked FPS
 - Confine cursor to the game window
+- Press escape to skip the credits
 - Invert Sprint Button
 - Fix in-game timer accuracy
 - Enable Timer By Default
-- Press space bar in level complete screen to go to the next level
-- Press escape in the credits section to skip the credits
 
 ## Gameplay
 - Randomiser
@@ -41,12 +41,13 @@ If you have any feature requests or want to report a bug, make sure to submit an
 ## LiveSplit
 - Enable LiveSplit Auto splitter
 	- Split By World / Split By Level
-	- Reset In Menu
+	- Reset on previous level select
 
 ## Miscellaneous
 - Custom Truck Colours
 - Enable Speedometer
 	- Configurable to show speed in m/s, km/h or mph.
+    - Option to split the speedometer into horizontal and vertical values.
 
 ### Features wishlist:
 - Airtime timer (for flying% category)
@@ -86,6 +87,10 @@ No.
 **I set my FPS to 240 but I'm only getting x?**
 
 Your pc probably can't render more than x.
+
+**My music keeps cutting out when the points audio is playing?**
+
+This can happen when unlocking the framerate. Make sure to enable the Points Audio Fix patch.
 
 **My auto splitter isn't working?**
 
